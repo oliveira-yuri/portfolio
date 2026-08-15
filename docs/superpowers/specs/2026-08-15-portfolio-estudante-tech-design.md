@@ -166,6 +166,7 @@ type Education = {
 }
 
 type Certificate = {
+  id: string
   title: Localized
   issuer: string
   date: string                 // 'YYYY-MM'
@@ -201,9 +202,16 @@ Ordem definida pelo que o recrutador procura primeiro, não por cronologia.
 5. **Habilidades** — três grupos: *uso em projetos* (`core`), *já usei*
    (`used`), *estudando agora* (`learning`). Sem porcentagem, barra de
    progresso ou estrelas.
-6. **Formação e certificados** — curso, instituição, período e status;
-   certificados com link de verificação quando houver.
-7. **Contato / rodapé** — repete os links do topo; e-mail visível como texto
+6. **Certificados** — seção própria, logo depois de Habilidades: habilidade é
+   o que a pessoa declara sobre si, certificado é prova de terceiro, e para
+   quem tem pouca experiência formal essa prova pesa. Cada item traz título,
+   emissor, data e link de verificação quando houver — certificado sem link
+   aparece igual, apenas sem o botão. Duas colunas no desktop, uma no celular,
+   ordenados do mais recente para o mais antigo. Com a lista vazia, a seção
+   inteira não é renderizada, para não deixar título órfão. A âncora
+   `#certificados` é endereço compartilhável da lista.
+7. **Formação** — curso, instituição, período e status.
+8. **Contato / rodapé** — repete os links do topo; e-mail visível como texto
    selecionável, não apenas ícone.
 
 Elementos transversais: seletor de idioma, alternador de tema, link "pular para
@@ -276,10 +284,11 @@ Vitest + Testing Library para unidade e componente; Playwright para o smoke
 test. Proporcional ao risco real de um site estático — o erro provável aqui é
 conteúdo malformado, não lógica complexa.
 
-1. **Invariantes de conteúdo** (maior valor): slugs de projeto únicos; todo
-   projeto com ao menos um link; períodos válidos e coerentes (`start` anterior
-   a `end`); nenhum campo de texto vazio ou contendo o prefixo `PENDENTE:`;
-   caminhos de CV e de imagem apontando para arquivos existentes em `public/`.
+1. **Invariantes de conteúdo** (maior valor): slugs de projeto e ids de
+   experiência e de certificado únicos; todo projeto com ao menos um link;
+   períodos válidos e coerentes (`start` anterior a `end`); nenhum campo de
+   texto vazio ou contendo o prefixo `PENDENTE:`; caminhos de CV e de imagem
+   apontando para arquivos existentes em `public/`.
 2. **Helpers**: `t()`, `isLocale()` (incluindo locale inválido) e
    `formatPeriod()` nos dois idiomas, com e sem data final.
 3. **Componentes de seção**: cada seção renderiza a partir de fixtures — título
@@ -318,6 +327,10 @@ O caminho natural, quando houver um projeto com história para contar: preencher
 `caseStudy` e criar a rota `/[locale]/projetos/[slug]` gerada estaticamente a
 partir dos projetos que tiverem esse campo. Nenhum dado precisa ser
 reestruturado — apenas uma pasta de rota é adicionada.
+
+Se a lista de certificados passar de uma dúzia, a seção passa a mostrar os
+principais e a lista completa migra para `/[locale]/certificados` — mesma
+estrutura de dados, apenas uma rota a mais.
 
 Outras evoluções possíveis, fora do escopo atual: blog em MDX, seção de
 depoimentos, domínio próprio.

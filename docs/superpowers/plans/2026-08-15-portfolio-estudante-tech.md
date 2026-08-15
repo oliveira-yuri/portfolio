@@ -299,6 +299,7 @@ export type Education = {
 }
 
 export type Certificate = {
+  id: string
   title: Localized
   issuer: string
   /** 'YYYY-MM' */
@@ -587,7 +588,14 @@ export const education: Education = {
   status: { pt: 'Em andamento', en: 'In progress' },
 }
 
-export const certificates: Certificate[] = []
+export const certificates: Certificate[] = [
+  {
+    id: 'pendente-certificado-1',
+    title: { pt: 'PENDENTE: nome do certificado', en: 'PENDENTE: certificate name' },
+    issuer: 'PENDENTE: emissor',
+    date: '2025-03',
+  },
+]
 ```
 
 - [ ] **Step 2: Colocar os PDFs de currículo**
@@ -681,7 +689,19 @@ describe('períodos', () => {
 
   it('usa YYYY-MM nas datas de certificado', () => {
     const invalidos = certificates.filter((c) => !isValidMonth(c.date))
-    expect(invalidos.map((c) => c.issuer)).toEqual([])
+    expect(invalidos.map((c) => c.id)).toEqual([])
+  })
+})
+
+describe('certificados', () => {
+  it('tem ids únicos', () => {
+    const ids = certificates.map((c) => c.id)
+    expect(new Set(ids).size).toBe(ids.length)
+  })
+
+  it('usa https nos links de verificação', () => {
+    const invalidos = certificates.filter((c) => c.credentialUrl && !c.credentialUrl.startsWith('https://'))
+    expect(invalidos.map((c) => c.id)).toEqual([])
   })
 })
 
@@ -1434,12 +1454,18 @@ export const educationFixture: Education = {
 
 export const certificatesFixture: Certificate[] = [
   {
+    id: 'fundamentos-ia',
     title: { pt: 'Fundamentos de IA', en: 'AI Foundations' },
     issuer: 'Exemplo Academy',
     date: '2025-03',
     credentialUrl: 'https://exemplo.com/credencial/1',
   },
-  { title: { pt: 'SQL Aplicado', en: 'Applied SQL' }, issuer: 'Exemplo Academy', date: '2024-09' },
+  {
+    id: 'sql-aplicado',
+    title: { pt: 'SQL Aplicado', en: 'Applied SQL' },
+    issuer: 'Exemplo Academy',
+    date: '2024-09',
+  },
 ]
 ```
 
@@ -1886,17 +1912,18 @@ git commit -m "feat: seção de projetos"
 
 ---
 
-### Task 10: Seções de habilidades e formação
+### Task 10: Seções de habilidades, certificados e formação
 
 **Files:**
-- Create: `src/components/sections/SkillsSection.tsx`, `src/components/sections/EducationSection.tsx`
-- Test: `src/components/sections/SkillsSection.test.tsx`, `src/components/sections/EducationSection.test.tsx`
+- Create: `src/components/sections/SkillsSection.tsx`, `src/components/sections/CertificatesSection.tsx`, `src/components/sections/EducationSection.tsx`
+- Test: `src/components/sections/SkillsSection.test.tsx`, `src/components/sections/CertificatesSection.test.tsx`, `src/components/sections/EducationSection.test.tsx`
 
 **Interfaces:**
 - Consumes: `SkillGroup`, `Education`, `Certificate`; `formatPeriod`, `formatMonth`; `Section`, `Tag`.
 - Produces:
   - `SkillsSection({ locale, groups }: { locale: Locale; groups: SkillGroup[] })`.
-  - `EducationSection({ locale, education, certificates }: { locale: Locale; education: Education; certificates: Certificate[] })`.
+  - `CertificatesSection({ locale, items }: { locale: Locale; items: Certificate[] })` — **devolve `null` quando a lista está vazia**, para não deixar título órfão na página.
+  - `EducationSection({ locale, education }: { locale: Locale; education: Education })` — só formação; certificados saíram daqui.
 
 - [ ] **Step 1: Escrever os testes que falham**
 
@@ -1937,17 +1964,68 @@ describe('SkillsSection', () => {
 })
 ```
 
+Criar `src/components/sections/CertificatesSection.test.tsx`:
+
+```tsx
+import { render, screen } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+import { CertificatesSection } from '@/components/sections/CertificatesSection'
+import { certificatesFixture } from '@/test/fixtures'
+
+describe('CertificatesSection', () => {
+  it('mostra título, emissor e data de cada certificado', () => {
+    render(<CertificatesSection locale="pt" items={certificatesFixture} />)
+
+    expect(screen.getByRole('region', { name: 'Certificados' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3, name: 'Fundamentos de IA' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3, name: 'SQL Aplicado' })).toBeInTheDocument()
+    expect(screen.getAllByText('Exemplo Academy')).toHaveLength(2)
+    expect(screen.getByText('mar 2025')).toBeInTheDocument()
+  })
+
+  it('linka a credencial de quem tem link, e mostra quem não tem sem penalizar', () => {
+    render(<CertificatesSection locale="pt" items={certificatesFixture} />)
+
+    const links = screen.getAllByRole('link', { name: 'Verificar credencial' })
+    expect(links).toHaveLength(1)
+    expect(links[0]).toHaveAttribute('href', 'https://exemplo.com/credencial/1')
+    expect(screen.getByRole('heading', { level: 3, name: 'SQL Aplicado' })).toBeInTheDocument()
+  })
+
+  it('mostra o certificado mais recente primeiro', () => {
+    render(<CertificatesSection locale="pt" items={[...certificatesFixture].reverse()} />)
+
+    const titulos = screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)
+    expect(titulos).toEqual(['Fundamentos de IA', 'SQL Aplicado'])
+  })
+
+  it('não renderiza nada quando a lista está vazia', () => {
+    const { container } = render(<CertificatesSection locale="pt" items={[]} />)
+
+    expect(container).toBeEmptyDOMElement()
+  })
+
+  it('traduz título da seção e dos certificados', () => {
+    render(<CertificatesSection locale="en" items={certificatesFixture} />)
+
+    expect(screen.getByRole('region', { name: 'Certificates' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3, name: 'AI Foundations' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Verify credential' })).toBeInTheDocument()
+  })
+})
+```
+
 Criar `src/components/sections/EducationSection.test.tsx`:
 
 ```tsx
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { EducationSection } from '@/components/sections/EducationSection'
-import { certificatesFixture, educationFixture } from '@/test/fixtures'
+import { educationFixture } from '@/test/fixtures'
 
 describe('EducationSection', () => {
   it('mostra curso, instituição, período e status', () => {
-    render(<EducationSection locale="pt" education={educationFixture} certificates={certificatesFixture} />)
+    render(<EducationSection locale="pt" education={educationFixture} />)
 
     expect(screen.getByRole('region', { name: 'Formação' })).toBeInTheDocument()
     expect(screen.getByText('Sistemas de Informação')).toBeInTheDocument()
@@ -1956,26 +2034,14 @@ describe('EducationSection', () => {
     expect(screen.getByText('Em andamento')).toBeInTheDocument()
   })
 
-  it('linka o certificado que tem credencial e mostra data', () => {
-    render(<EducationSection locale="pt" education={educationFixture} certificates={certificatesFixture} />)
+  it('não trata mais de certificados', () => {
+    render(<EducationSection locale="pt" education={educationFixture} />)
 
-    expect(screen.getByRole('link', { name: 'Verificar credencial' })).toHaveAttribute(
-      'href',
-      'https://exemplo.com/credencial/1',
-    )
-    expect(screen.getAllByRole('link', { name: 'Verificar credencial' })).toHaveLength(1)
-    expect(screen.getByText('mar 2025')).toBeInTheDocument()
-  })
-
-  it('omite o bloco de certificados quando não há nenhum', () => {
-    render(<EducationSection locale="pt" education={educationFixture} certificates={[]} />)
-
-    expect(screen.getByText('Sistemas de Informação')).toBeInTheDocument()
-    expect(screen.queryByRole('heading', { level: 3, name: 'Certificados' })).not.toBeInTheDocument()
+    expect(screen.queryByText('Certificados')).not.toBeInTheDocument()
   })
 
   it('traduz o conteúdo', () => {
-    render(<EducationSection locale="en" education={educationFixture} certificates={certificatesFixture} />)
+    render(<EducationSection locale="en" education={educationFixture} />)
 
     expect(screen.getByRole('region', { name: 'Education' })).toBeInTheDocument()
     expect(screen.getByText('Information Systems')).toBeInTheDocument()
@@ -1985,7 +2051,7 @@ describe('EducationSection', () => {
 
 - [ ] **Step 2: Rodar e confirmar que falham**
 
-Run: `npm test src/components/sections/SkillsSection.test.tsx src/components/sections/EducationSection.test.tsx`
+Run: `npm test src/components/sections/SkillsSection.test.tsx src/components/sections/CertificatesSection.test.tsx src/components/sections/EducationSection.test.tsx`
 Esperado: FAIL — módulos não encontrados.
 
 - [ ] **Step 3: Implementar SkillsSection**
@@ -2027,26 +2093,60 @@ export function SkillsSection({ locale, groups }: { locale: Locale; groups: Skil
 }
 ```
 
-- [ ] **Step 4: Implementar EducationSection**
+- [ ] **Step 4: Implementar CertificatesSection**
+
+Criar `src/components/sections/CertificatesSection.tsx`. Cada certificado é um cartão, porque aqui ele é conteúdo de primeira classe — não um apêndice de outra seção.
+
+```tsx
+import { Section } from '@/components/ui/Section'
+import type { Certificate } from '@/content/types'
+import { ui } from '@/content/ui'
+import { formatMonth } from '@/lib/date'
+import { type Locale, t } from '@/lib/i18n'
+
+export function CertificatesSection({ locale, items }: { locale: Locale; items: Certificate[] }) {
+  if (items.length === 0) return null
+
+  const ordenados = [...items].sort((a, b) => b.date.localeCompare(a.date))
+
+  return (
+    <Section id="certificados" title={t(ui.sections.certificates, locale)}>
+      <ul className="grid gap-4 md:grid-cols-2">
+        {ordenados.map((certificate) => (
+          <li key={certificate.id} className="rounded-lg border border-line bg-raised p-5 transition-colors hover:border-accent">
+            <h3 className="font-serif text-xl text-ink">{t(certificate.title, locale)}</h3>
+            <p className="mt-1 text-muted">{certificate.issuer}</p>
+            <p className="mt-1 font-mono text-xs text-muted">{formatMonth(certificate.date, locale)}</p>
+            {certificate.credentialUrl && (
+              <a
+                href={certificate.credentialUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 inline-block border-b border-line pb-0.5 text-sm transition-colors hover:border-accent hover:text-accent"
+              >
+                {t(ui.actions.verifyCredential, locale)}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )
+}
+```
+
+- [ ] **Step 5: Implementar EducationSection**
 
 Criar `src/components/sections/EducationSection.tsx`:
 
 ```tsx
 import { Section } from '@/components/ui/Section'
-import type { Certificate, Education } from '@/content/types'
+import type { Education } from '@/content/types'
 import { ui } from '@/content/ui'
-import { formatMonth, formatPeriod } from '@/lib/date'
+import { formatPeriod } from '@/lib/date'
 import { type Locale, t } from '@/lib/i18n'
 
-export function EducationSection({
-  locale,
-  education,
-  certificates,
-}: {
-  locale: Locale
-  education: Education
-  certificates: Certificate[]
-}) {
+export function EducationSection({ locale, education }: { locale: Locale; education: Education }) {
   return (
     <Section id="formacao" title={t(ui.sections.education, locale)}>
       <div className="grid gap-2 md:grid-cols-[10rem_1fr] md:gap-8">
@@ -2057,48 +2157,21 @@ export function EducationSection({
           <p className="mt-1 font-mono text-xs text-accent">{t(education.status, locale)}</p>
         </div>
       </div>
-
-      {certificates.length > 0 && (
-        <div className="mt-12 grid gap-3 md:grid-cols-[10rem_1fr] md:gap-8">
-          <h3 className="font-mono text-xs tracking-widest text-muted uppercase md:pt-1">
-            {t(ui.sections.certificates, locale)}
-          </h3>
-          <ul className="space-y-4">
-            {certificates.map((certificate) => (
-              <li key={`${certificate.issuer}-${certificate.date}`} className="flex flex-wrap items-baseline gap-x-4">
-                <span className="text-ink">{t(certificate.title, locale)}</span>
-                <span className="text-muted">{certificate.issuer}</span>
-                <span className="font-mono text-xs text-muted">{formatMonth(certificate.date, locale)}</span>
-                {certificate.credentialUrl && (
-                  <a
-                    href={certificate.credentialUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="border-b border-line pb-0.5 text-sm transition-colors hover:border-accent hover:text-accent"
-                  >
-                    {t(ui.actions.verifyCredential, locale)}
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </Section>
   )
 }
 ```
 
-- [ ] **Step 5: Rodar os testes**
+- [ ] **Step 6: Rodar os testes**
 
 Run: `npm test && npm run typecheck`
 Esperado: tudo passando.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
 git add -A
-git commit -m "feat: seções de habilidades e formação"
+git commit -m "feat: seções de habilidades, certificados e formação"
 ```
 
 ---
@@ -2165,7 +2238,15 @@ describe('página do portfólio', () => {
     render(await PortfolioPage({ params: Promise.resolve({ locale: 'pt' }) }))
 
     const regioes = screen.getAllByRole('region').map((r) => r.getAttribute('id'))
-    expect(regioes).toEqual(['sobre', 'experiencia', 'projetos', 'habilidades', 'formacao', 'contato'])
+    expect(regioes).toEqual([
+      'sobre',
+      'experiencia',
+      'projetos',
+      'habilidades',
+      'certificados',
+      'formacao',
+      'contato',
+    ])
   })
 
   it('tem exatamente um h1 e um main', async () => {
@@ -2279,6 +2360,7 @@ Substituir `src/app/[locale]/page.tsx`:
 ```tsx
 import { notFound } from 'next/navigation'
 import { AboutSection } from '@/components/sections/AboutSection'
+import { CertificatesSection } from '@/components/sections/CertificatesSection'
 import { ContactSection } from '@/components/sections/ContactSection'
 import { EducationSection } from '@/components/sections/EducationSection'
 import { ExperienceSection } from '@/components/sections/ExperienceSection'
@@ -2316,7 +2398,10 @@ export default async function PortfolioPage({ params }: { params: Promise<{ loca
           <SkillsSection locale={locale} groups={skillGroups} />
         </Reveal>
         <Reveal>
-          <EducationSection locale={locale} education={education} certificates={certificates} />
+          <CertificatesSection locale={locale} items={certificates} />
+        </Reveal>
+        <Reveal>
+          <EducationSection locale={locale} education={education} />
         </Reveal>
         <Reveal>
           <ContactSection locale={locale} profile={profile} />
@@ -2686,7 +2771,7 @@ Criar `tests/e2e/smoke.spec.ts`:
 ```ts
 import { expect, test } from '@playwright/test'
 
-const SECOES = ['sobre', 'experiencia', 'projetos', 'habilidades', 'formacao', 'contato']
+const SECOES = ['sobre', 'experiencia', 'projetos', 'habilidades', 'certificados', 'formacao', 'contato']
 
 test('a raiz redireciona para a versão em português', async ({ page }) => {
   await page.goto('/')
@@ -2717,6 +2802,14 @@ test('trocar de idioma muda o conteúdo e o currículo servido', async ({ page }
   )
 })
 
+test('a âncora de certificados leva direto à seção', async ({ page }) => {
+  await page.goto('/pt#certificados')
+
+  const secao = page.locator('#certificados')
+  await expect(secao).toBeInViewport()
+  await expect(secao.getByRole('heading', { level: 3 }).first()).toBeVisible()
+})
+
 test('locale inválido resulta em 404', async ({ page }) => {
   const resposta = await page.goto('/es')
   expect(resposta?.status()).toBe(404)
@@ -2742,7 +2835,9 @@ test('o tema escuro é alternado e persiste ao recarregar', async ({ page }) => 
 - [ ] **Step 4: Rodar o smoke test**
 
 Run: `npm run test:e2e`
-Esperado: 6 testes passando. Se o teste de tema falhar por corrida com a hidratação, aguarde o botão ficar habilitado antes do clique — não relaxe a asserção.
+Esperado: 7 testes passando. Se o teste de tema falhar por corrida com a hidratação, aguarde o botão ficar habilitado antes do clique — não relaxe a asserção.
+
+O teste da âncora de certificados pressupõe ao menos um certificado em `src/content/education.ts` — a Task 3 já deixa um cadastrado, e a seção só desaparece quando a lista fica vazia.
 
 - [ ] **Step 5: Configurar a integração contínua**
 
@@ -2825,6 +2920,8 @@ describe('conteúdo final', () => {
       education.institution,
       ...experiences.map((e) => e.organization),
       ...projects.map((p) => p.title),
+      ...certificates.map((c) => c.issuer),
+      ...certificates.flatMap((c) => (c.credentialUrl ? [c.credentialUrl] : [])),
     ]
     expect(camposSimples.filter((valor) => valor.includes('PENDENTE'))).toEqual([])
   })
@@ -2927,7 +3024,9 @@ Criar o repositório no GitHub, dar push e conectar o projeto na Vercel (framewo
 
 ## Auto-revisão do plano
 
-**Cobertura da spec:** cada requisito tem task correspondente — one-pager estático (4, 11), bilinguismo sem biblioteca (1, 4), conteúdo em arquivos TS (2, 3), as sete seções (7–11), tokens e tipografia (5), tema escuro (5), movimento com `prefers-reduced-motion` (5, 11), acessibilidade (5, 6, 14), SEO com `hreflang`/sitemap/robots/JSON-LD/OG (12), performance com meta Lighthouse (14), as quatro camadas de teste (2, 3, 7–11, 13), deploy e CI (13, 14).
+**Cobertura da spec:** cada requisito tem task correspondente — one-pager estático (4, 11), bilinguismo sem biblioteca (1, 4), conteúdo em arquivos TS (2, 3), as oito seções (7–11), tokens e tipografia (5), tema escuro (5), movimento com `prefers-reduced-motion` (5, 11), acessibilidade (5, 6, 14), SEO com `hreflang`/sitemap/robots/JSON-LD/OG (12), performance com meta Lighthouse (14), as quatro camadas de teste (2, 3, 7–11, 13), deploy e CI (13, 14).
+
+**Emenda de 15/08/2026 — certificados como seção própria:** certificados saíram de dentro de Formação e viraram a seção `#certificados`, entre Habilidades e Formação. `Certificate` ganhou `id` (a chave anterior, emissor + data, colidia com dois certificados do mesmo emissor no mesmo mês) e o teste de invariante passou a cobrar unicidade e links `https`. A mudança ficou dentro da Task 10, sem renumerar o plano; Tasks 2, 3, 11 e 13 foram ajustadas junto.
 
 **Correções encontradas na revisão:** duas restrições do App Router que o rascunho violava. O layout raiz precisa emitir `<html>` e `<body>`, então ele passou a morar em `src/app/[locale]/layout.tsx` (posição suportada justamente para i18n) e o redirect da raiz virou configuração em `next.config.ts`, em vez de uma página. E arquivos de rota só aceitam exports conhecidos, então as fontes e o script de tema foram para `src/lib/fonts.ts`.
 
