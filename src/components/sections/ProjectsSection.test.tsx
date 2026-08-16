@@ -47,4 +47,13 @@ describe('ProjectsSection', () => {
 
     expect(screen.getByRole('region', { name: 'Projetos' })).toBeInTheDocument()
   })
+
+  it('omite o link de código do projeto que só tem demo', () => {
+    const somenteDemo = { ...projectFixture[0], slug: 'somente-demo', links: { demo: 'https://somente-demo.exemplo.com' } }
+
+    render(<ProjectsSection locale="pt" items={[somenteDemo]} />)
+
+    expect(screen.getByRole('link', { name: 'Ver demo' })).toHaveAttribute('href', 'https://somente-demo.exemplo.com')
+    expect(screen.queryByRole('link', { name: 'Ver código' })).not.toBeInTheDocument()
+  })
 })
