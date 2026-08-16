@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSyncExternalStore } from 'react'
 import { ui } from '@/content/ui'
@@ -34,7 +33,14 @@ export function LocaleSwitch({ locale }: { locale: Locale }) {
   const visibleText = target.toUpperCase()
 
   return (
-    <Link
+    // <a> comum, e não next/link, de propósito: a troca de idioma precisa ser
+    // uma navegação de documento inteiro. Numa navegação interna do Next, o
+    // React re-renderiza <html> com apenas as classes que conhece e apaga a
+    // classe 'dark', que é aplicada por fora dele (pelo script anti-flash e
+    // pelo ThemeToggle) — o visitante trocava de idioma e perdia o tema
+    // escuro. Com uma navegação completa o script roda de novo e restaura o
+    // tema a partir do localStorage. São duas páginas estáticas; o custo é nulo.
+    <a
       href={href}
       hrefLang={target}
       // O nome acessível precisa conter o texto visível (WCAG 2.5.3 — Label in
@@ -53,6 +59,6 @@ export function LocaleSwitch({ locale }: { locale: Locale }) {
       className={topBarButtonClass}
     >
       {visibleText}
-    </Link>
+    </a>
   )
 }
