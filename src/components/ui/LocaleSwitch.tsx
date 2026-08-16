@@ -30,15 +30,19 @@ export function LocaleSwitch({ locale }: { locale: Locale }) {
 
   const target = otherLocale(locale)
   const href = `${pathname.replace(`/${locale}`, `/${target}`)}${hash}`
+  const visibleText = target.toUpperCase()
 
   return (
     <Link
       href={href}
       hrefLang={target}
-      aria-label={t(ui.actions.switchLanguage, locale)}
+      // O nome acessível precisa conter o texto visível (WCAG 2.5.3 — Label in
+      // Name): quem usa comando de voz diz o que vê ("clique em EN"), então a
+      // sigla entra composta ao texto traduzido, em vez de substituí-lo.
+      aria-label={`${t(ui.actions.switchLanguage, locale)} (${visibleText})`}
       className="rounded border border-line px-2 py-1 font-mono text-xs text-muted transition-colors hover:text-ink"
     >
-      {target.toUpperCase()}
+      {visibleText}
     </Link>
   )
 }

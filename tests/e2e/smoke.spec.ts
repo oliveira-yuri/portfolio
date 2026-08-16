@@ -27,7 +27,7 @@ test('trocar de idioma muda o conteúdo e o currículo servido', async ({ page }
     '/cv/curriculo-pt.pdf',
   )
 
-  await page.getByRole('link', { name: 'Ver em inglês' }).click()
+  await page.getByRole('link', { name: 'Ver em inglês (EN)' }).click()
 
   await expect(page).toHaveURL(/\/en$/)
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
