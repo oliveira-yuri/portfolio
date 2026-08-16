@@ -3,6 +3,7 @@
 import { useSyncExternalStore } from 'react'
 import { ui } from '@/content/ui'
 import { type Locale, t } from '@/lib/i18n'
+import { topBarButtonClass } from '@/lib/styles'
 
 // A classe 'dark' em <html> é uma fonte de verdade externa ao React (definida
 // pelo script anti-flash antes da primeira pintura). useSyncExternalStore lê
@@ -46,7 +47,7 @@ export function ThemeToggle({ locale }: { locale: Locale }) {
       onClick={toggle}
       aria-pressed={dark}
       aria-label={t(ui.actions.toggleTheme, locale)}
-      className="rounded border border-line px-2 py-1 font-mono text-xs text-muted transition-colors hover:text-ink"
+      className={topBarButtonClass}
     >
       {dark ? '☀' : '☾'}
     </button>

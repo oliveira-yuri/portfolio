@@ -3,6 +3,7 @@ import type { Certificate } from '@/content/types'
 import { ui } from '@/content/ui'
 import { formatMonth } from '@/lib/date'
 import { type Locale, t } from '@/lib/i18n'
+import { underlineLinkClass } from '@/lib/styles'
 
 export function CertificatesSection({ locale, items }: { locale: Locale; items: Certificate[] }) {
   if (items.length === 0) return null
@@ -25,7 +26,7 @@ export function CertificatesSection({ locale, items }: { locale: Locale; items: 
                 href={certificate.credentialUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-4 inline-block border-b border-line pb-0.5 text-sm transition-colors hover:border-accent hover:text-accent"
+                className={`mt-4 inline-block text-sm ${underlineLinkClass}`}
               >
                 {t(ui.actions.verifyCredential, locale)}
               </a>
