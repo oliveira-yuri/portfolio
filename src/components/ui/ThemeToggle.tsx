@@ -29,7 +29,14 @@ export function ThemeToggle({ locale }: { locale: Locale }) {
   function toggle() {
     const next = !dark
     document.documentElement.classList.toggle('dark', next)
-    localStorage.setItem('theme', next ? 'dark' : 'light')
+    try {
+      localStorage.setItem('theme', next ? 'dark' : 'light')
+    } catch {
+      // Persistência é o lado opcional: se falhar (modo privado, política de
+      // armazenamento, cota excedida), o tema ainda vale para esta sessão —
+      // o que não pode falhar é o botão continuar dizendo a verdade sobre o
+      // tema realmente aplicado em <html>, por isso o notify roda de qualquer forma.
+    }
     for (const listener of listeners) listener()
   }
 

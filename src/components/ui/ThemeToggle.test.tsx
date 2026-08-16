@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 describe('ThemeToggle', () => {
@@ -40,5 +40,23 @@ describe('ThemeToggle', () => {
     expect(botao).toHaveAttribute('aria-pressed', 'false')
     await userEvent.click(botao)
     expect(botao).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  it('mantém aria-pressed e a classe em <html> sincronizados mesmo se localStorage falhar', async () => {
+    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('armazenamento indisponível')
+    })
+
+    try {
+      render(<ThemeToggle locale="pt" />)
+      const botao = screen.getByRole('button', { name: 'Alternar tema' })
+
+      await userEvent.click(botao)
+
+      expect(document.documentElement).toHaveClass('dark')
+      expect(botao).toHaveAttribute('aria-pressed', 'true')
+    } finally {
+      setItemSpy.mockRestore()
+    }
   })
 })
