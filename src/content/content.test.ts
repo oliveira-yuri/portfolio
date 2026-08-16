@@ -39,7 +39,8 @@ describe('textos bilíngues', () => {
 describe('projetos', () => {
   it('tem slugs únicos', () => {
     const slugs = projects.map((p) => p.slug)
-    expect(new Set(slugs).size).toBe(slugs.length)
+    const duplicados = slugs.filter((valor, indice) => slugs.indexOf(valor) !== indice)
+    expect(duplicados).toEqual([])
   })
 
   it('todo projeto tem ao menos um link', () => {
@@ -85,7 +86,8 @@ describe('períodos', () => {
 describe('certificados', () => {
   it('tem ids únicos', () => {
     const ids = certificates.map((c) => c.id)
-    expect(new Set(ids).size).toBe(ids.length)
+    const duplicados = ids.filter((valor, indice) => ids.indexOf(valor) !== indice)
+    expect(duplicados).toEqual([])
   })
 
   it('usa https nos links de verificação', () => {
@@ -97,7 +99,8 @@ describe('certificados', () => {
 describe('experiências', () => {
   it('tem ids únicos', () => {
     const ids = experiences.map((e) => e.id)
-    expect(new Set(ids).size).toBe(ids.length)
+    const duplicados = ids.filter((valor, indice) => ids.indexOf(valor) !== indice)
+    expect(duplicados).toEqual([])
   })
 
   it('tem de 1 a 3 bullets de impacto', () => {
@@ -129,6 +132,7 @@ describe('habilidades', () => {
 
   it('não repete a mesma tecnologia em dois níveis', () => {
     const todos = skillGroups.flatMap((g) => g.items)
-    expect(new Set(todos).size).toBe(todos.length)
+    const duplicados = todos.filter((valor, indice) => todos.indexOf(valor) !== indice)
+    expect(duplicados).toEqual([])
   })
 })
