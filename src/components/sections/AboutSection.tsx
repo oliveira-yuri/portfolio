@@ -7,8 +7,8 @@ export function AboutSection({ locale, profile }: { locale: Locale; profile: Pro
   return (
     <Section id="sobre" title={t(ui.sections.about, locale)}>
       <div className="max-w-[65ch] space-y-5 text-lg">
-        {profile.bio.map((paragrafo) => (
-          <p key={paragrafo.pt}>{t(paragrafo, locale)}</p>
+        {profile.bio.map((paragrafo, index) => (
+          <p key={index}>{t(paragrafo, locale)}</p>
         ))}
         <p className="font-serif text-xl text-accent">{t(profile.intent, locale)}</p>
       </div>
