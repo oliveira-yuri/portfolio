@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { ProjectsSection } from '@/components/sections/ProjectsSection'
+import type { Project } from '@/content/types'
 import { projectFixture } from '@/test/fixtures'
 
 describe('ProjectsSection', () => {
@@ -35,11 +36,42 @@ describe('ProjectsSection', () => {
     expect(screen.getAllByRole('img')).toHaveLength(1)
   })
 
-  it('mostra o projeto mais recente primeiro', () => {
+  it('mostra o projeto mais recente primeiro dentro de cada grupo de destaque', () => {
     render(<ProjectsSection locale="pt" items={[...projectFixture].reverse()} />)
 
     const titulos = screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)
     expect(titulos).toEqual(['Analisador de Notas', 'CLI de Estudos'])
+  })
+
+  it('mostra o papel do autor no projeto perto do período', () => {
+    render(<ProjectsSection locale="pt" items={projectFixture} />)
+
+    expect(screen.getAllByText(/Projeto pessoal/)).toHaveLength(projectFixture.length)
+  })
+
+  it('coloca projeto em destaque primeiro mesmo quando é mais antigo que os outros', () => {
+    // Arranjo onde destaque e data discordam: se a ordenação fosse só por data,
+    // "Projeto Recente Sem Destaque" viria primeiro (2026 > 2022). A regra é
+    // destaque primeiro, então "Projeto Antigo em Destaque" deve vir primeiro.
+    const antigoDestaque: Project = {
+      ...projectFixture[0],
+      slug: 'antigo-destaque',
+      title: 'Projeto Antigo em Destaque',
+      featured: true,
+      period: { start: '2022-01', end: '2022-06' },
+    }
+    const recenteSemDestaque: Project = {
+      ...projectFixture[1],
+      slug: 'recente-sem-destaque',
+      title: 'Projeto Recente Sem Destaque',
+      featured: false,
+      period: { start: '2026-01', end: null },
+    }
+
+    render(<ProjectsSection locale="pt" items={[recenteSemDestaque, antigoDestaque]} />)
+
+    const titulos = screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)
+    expect(titulos).toEqual(['Projeto Antigo em Destaque', 'Projeto Recente Sem Destaque'])
   })
 
   it('não quebra com lista vazia', () => {

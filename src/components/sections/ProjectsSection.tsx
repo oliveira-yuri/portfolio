@@ -5,14 +5,26 @@ import type { Project } from '@/content/types'
 import { ui } from '@/content/ui'
 import { formatPeriod, sortByPeriodDesc } from '@/lib/date'
 import { type Locale, t } from '@/lib/i18n'
+import { underlineLinkClass } from '@/lib/styles'
 
-const linkClass = 'border-b border-line pb-0.5 text-sm transition-colors hover:border-accent hover:text-accent'
+const linkClass = `${underlineLinkClass} text-sm`
+
+/**
+ * Destaques primeiro (controle do dono sobre o que aparece primeiro conforme
+ * a lista cresce), e dentro de cada grupo (destaque / não destaque), do mais
+ * recente para o mais antigo.
+ */
+function sortForDisplay(items: readonly Project[]): Project[] {
+  const featured = sortByPeriodDesc(items.filter((project) => project.featured))
+  const rest = sortByPeriodDesc(items.filter((project) => !project.featured))
+  return [...featured, ...rest]
+}
 
 export function ProjectsSection({ locale, items }: { locale: Locale; items: Project[] }) {
   return (
     <Section id="projetos" title={t(ui.sections.projects, locale)}>
       <ul className="space-y-10">
-        {sortByPeriodDesc(items).map((project) => (
+        {sortForDisplay(items).map((project) => (
           <li
             key={project.slug}
             className="rounded-lg border border-line bg-raised p-6 transition-colors hover:border-accent md:p-8"
@@ -29,7 +41,9 @@ export function ProjectsSection({ locale, items }: { locale: Locale; items: Proj
             )}
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h3 className="font-serif text-2xl text-ink">{project.title}</h3>
-              <p className="font-mono text-xs text-muted">{formatPeriod(project.period, locale)}</p>
+              <p className="font-mono text-xs text-muted">
+                {t(project.role, locale)} · {formatPeriod(project.period, locale)}
+              </p>
             </div>
             <p className="mt-2 text-lg text-muted">{t(project.summary, locale)}</p>
             <p className="mt-4 max-w-[65ch]">{t(project.description, locale)}</p>
