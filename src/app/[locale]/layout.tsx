@@ -35,7 +35,10 @@ export default async function LocaleLayout({
       <body className="bg-surface text-ink">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd(locale)) }}
+          // Conteúdo real já contém '<' (ex.: profile.headline.pt tem "<curso>"),
+          // e um futuro '</script>' dentro do JSON fecharia a tag mais cedo.
+          // Escapar '<' neutraliza ambos sem afetar o JSON (< é válido em string JS/JSON).
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd(locale)).replace(/</g, '\\u003c') }}
         />
         {children}
       </body>

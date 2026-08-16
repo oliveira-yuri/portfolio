@@ -4,7 +4,9 @@ import { defaultLocale, isLocale, locales, t } from '@/lib/i18n'
 
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
-export const alt = 'Open Graph'
+// Next só permite um `alt` estático por rota (não pode variar por locale aqui),
+// e este texto vira og:image:alt em produção — não pode ser um literal em inglês.
+export const alt = profile.name
 export const dynamic = 'force-static'
 
 export function generateStaticParams() {
