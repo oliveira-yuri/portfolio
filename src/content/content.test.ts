@@ -107,6 +107,15 @@ describe('experiências', () => {
     const foraDoLimite = experiences.filter((e) => e.highlights.length < 1 || e.highlights.length > 3)
     expect(foraDoLimite.map((e) => e.id)).toEqual([])
   })
+
+  it('não repete a mesma tecnologia dentro de uma experiência', () => {
+    const duplicados = experiences.flatMap((e) => {
+      const tech = e.tech ?? []
+      const repetidas = tech.filter((valor, indice) => tech.indexOf(valor) !== indice)
+      return repetidas.map((tecnologia) => `${e.id}: ${tecnologia}`)
+    })
+    expect(duplicados).toEqual([])
+  })
 })
 
 describe('perfil', () => {
