@@ -23,7 +23,7 @@ export const profile: Profile = {
   },
   links: {
     github: 'https://github.com/oliveira-yuri',
-    linkedin: 'PENDENTE: URL do LinkedIn',
+    linkedin: 'https://www.linkedin.com/in/yuri-oliveira8309/',
     email: 'yuri.oliveira.silva.24@gmail.com',
   },
   cv: { pt: '/cv/curriculo-pt.pdf', en: '/cv/curriculo-pt.pdf' },
