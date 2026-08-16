@@ -1,13 +1,20 @@
+import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { notFound } from 'next/navigation'
-import { htmlLang, isLocale, locales } from '@/lib/i18n'
+import { defaultLocale, htmlLang, isLocale, locales } from '@/lib/i18n'
 import { fontClassName, themeScript } from '@/lib/fonts'
+import { metadataFor, personJsonLd } from '@/lib/seo'
 import '../globals.css'
 
 export const dynamicParams = false
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  return metadataFor(isLocale(locale) ? locale : defaultLocale)
 }
 
 export default async function LocaleLayout({
@@ -25,7 +32,13 @@ export default async function LocaleLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="bg-surface text-ink">{children}</body>
+      <body className="bg-surface text-ink">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd(locale)) }}
+        />
+        {children}
+      </body>
     </html>
   )
 }
