@@ -1,10 +1,15 @@
 import { ImageResponse } from 'next/og'
 import { profile } from '@/content/profile'
-import { defaultLocale, isLocale, t } from '@/lib/i18n'
+import { defaultLocale, isLocale, locales, t } from '@/lib/i18n'
 
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 export const alt = 'Open Graph'
+export const dynamic = 'force-static'
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }))
+}
 
 export default async function OpenGraphImage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
