@@ -74,10 +74,10 @@ describe('ProjectsSection', () => {
     expect(titulos).toEqual(['Projeto Antigo em Destaque', 'Projeto Recente Sem Destaque'])
   })
 
-  it('não quebra com lista vazia', () => {
-    render(<ProjectsSection locale="pt" items={[]} />)
+  it('não renderiza nada quando a lista está vazia', () => {
+    const { container } = render(<ProjectsSection locale="pt" items={[]} />)
 
-    expect(screen.getByRole('region', { name: 'Projetos' })).toBeInTheDocument()
+    expect(container).toBeEmptyDOMElement()
   })
 
   it('omite o link de código do projeto que só tem demo', () => {

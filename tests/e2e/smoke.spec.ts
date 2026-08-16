@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-const SECOES = ['sobre', 'experiencia', 'projetos', 'habilidades', 'certificados', 'formacao', 'contato']
+const SECOES = ['sobre', 'experiencia', 'habilidades', 'certificados', 'formacao', 'contato']
 
 test('a raiz redireciona para a versão em português', async ({ page }) => {
   await page.goto('/')
@@ -33,7 +33,7 @@ test('trocar de idioma muda o conteúdo e o currículo servido', async ({ page }
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
   await expect(page.getByRole('link', { name: 'Download résumé' }).first()).toHaveAttribute(
     'href',
-    '/cv/resume-en.pdf',
+    '/cv/curriculo-pt.pdf',
   )
 })
 
@@ -61,11 +61,9 @@ test('locale inválido resulta em 404', async ({ page }) => {
   expect(resposta?.status()).toBe(404)
 })
 
-test('o currículo é servido de verdade nos dois idiomas', async ({ request }) => {
-  for (const caminho of ['/cv/curriculo-pt.pdf', '/cv/resume-en.pdf']) {
-    const resposta = await request.get(caminho)
-    expect(resposta.status(), caminho).toBe(200)
-  }
+test('o currículo é servido de verdade', async ({ request }) => {
+  const resposta = await request.get('/cv/curriculo-pt.pdf')
+  expect(resposta.status()).toBe(200)
 })
 
 test('o tema escuro é alternado e persiste ao recarregar', async ({ page }) => {

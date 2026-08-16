@@ -14,15 +14,7 @@ describe('página do portfólio', () => {
     render(await PortfolioPage({ params: Promise.resolve({ locale: 'pt' }) }))
 
     const regioes = screen.getAllByRole('region').map((r) => r.getAttribute('id'))
-    expect(regioes).toEqual([
-      'sobre',
-      'experiencia',
-      'projetos',
-      'habilidades',
-      'certificados',
-      'formacao',
-      'contato',
-    ])
+    expect(regioes).toEqual(['sobre', 'experiencia', 'habilidades', 'certificados', 'formacao', 'contato'])
   })
 
   it('tem exatamente um h1 e um main', async () => {

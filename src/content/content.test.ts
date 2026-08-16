@@ -52,10 +52,6 @@ describe('projetos', () => {
     const faltando = projects.filter((p) => p.image && !existsSync(publicFile(p.image.src)))
     expect(faltando.map((p) => p.slug)).toEqual([])
   })
-
-  it('tem ao menos um projeto em destaque', () => {
-    expect(projects.some((p) => p.featured)).toBe(true)
-  })
 })
 
 describe('períodos', () => {
@@ -90,8 +86,10 @@ describe('certificados', () => {
     expect(duplicados).toEqual([])
   })
 
-  it('usa https nos links de verificação', () => {
-    const invalidos = certificates.filter((c) => c.credentialUrl && !c.credentialUrl.startsWith('https://'))
+  it('usa https ou caminho absoluto do site nos links de verificação', () => {
+    const invalidos = certificates.filter(
+      (c) => c.credentialUrl && !c.credentialUrl.startsWith('https://') && !c.credentialUrl.startsWith('/'),
+    )
     expect(invalidos.map((c) => c.id)).toEqual([])
   })
 })

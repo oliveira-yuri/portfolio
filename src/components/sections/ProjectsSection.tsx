@@ -21,6 +21,8 @@ function sortForDisplay(items: readonly Project[]): Project[] {
 }
 
 export function ProjectsSection({ locale, items }: { locale: Locale; items: Project[] }) {
+  if (items.length === 0) return null
+
   return (
     <Section id="projetos" title={t(ui.sections.projects, locale)}>
       <ul className="space-y-10">
