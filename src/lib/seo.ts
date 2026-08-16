@@ -3,7 +3,7 @@ import { education } from '@/content/education'
 import { profile } from '@/content/profile'
 import { skillGroups } from '@/content/skills'
 import { type Locale, htmlLang, t } from '@/lib/i18n'
-import { siteUrl } from '@/lib/site'
+import { absoluteUrl, siteUrl } from '@/lib/site'
 
 export function personJsonLd(locale: Locale): Record<string, unknown> {
   return {
@@ -11,7 +11,7 @@ export function personJsonLd(locale: Locale): Record<string, unknown> {
     '@type': 'Person',
     name: profile.name,
     description: t(profile.headline, locale),
-    url: `${siteUrl}/${locale}`,
+    url: absoluteUrl(`/${locale}`),
     email: `mailto:${profile.links.email}`,
     sameAs: [profile.links.github, profile.links.linkedin],
     knowsAbout: skillGroups.flatMap((group) => group.items),
@@ -38,7 +38,7 @@ export function metadataFor(locale: Locale): Metadata {
       type: 'profile',
       title,
       description: t(profile.headline, locale),
-      url: `${siteUrl}/${locale}`,
+      url: absoluteUrl(`/${locale}`),
       locale: locale === 'pt' ? 'pt_BR' : 'en_US',
     },
     twitter: { card: 'summary_large_image', title, description: t(profile.headline, locale) },
