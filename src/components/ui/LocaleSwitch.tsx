@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSyncExternalStore } from 'react'
 import { ui } from '@/content/ui'
-import { type Locale, otherLocale, t } from '@/lib/i18n'
+import { type Locale, htmlLang, otherLocale, t } from '@/lib/i18n'
+import { topBarButtonClass } from '@/lib/styles'
 
 // A âncora é uma fonte de verdade externa ao React (o navegador a atualiza ao
 // rolar a página ou ao clicar num link interno). useSyncExternalStore lê esse
@@ -40,7 +41,16 @@ export function LocaleSwitch({ locale }: { locale: Locale }) {
       // Name): quem usa comando de voz diz o que vê ("clique em EN"), então a
       // sigla entra composta ao texto traduzido, em vez de substituí-lo.
       aria-label={`${t(ui.actions.switchLanguage, locale)} (${visibleText})`}
-      className="rounded border border-line px-2 py-1 font-mono text-xs text-muted transition-colors hover:text-ink"
+      // ui.actions.switchLanguage é escrito em português nas duas chaves
+      // (pt: 'Ver em inglês', en: 'Ver em português' — de propósito, ver
+      // content/ui.ts), então o idioma real do nome acessível é sempre
+      // pt-BR, independente do locale da página atual. Em /en, o documento
+      // está em lang="en" mas este rótulo específico não está — sem marcar
+      // isso, um leitor de tela liaria as palavras em português com voz de
+      // inglês (WCAG 3.1.2 — Language of Parts). hrefLang, por outro lado,
+      // descreve o destino do link, não o idioma do próprio conteúdo.
+      lang={htmlLang.pt}
+      className={topBarButtonClass}
     >
       {visibleText}
     </Link>
