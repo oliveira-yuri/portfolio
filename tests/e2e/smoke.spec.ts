@@ -46,6 +46,17 @@ test('a âncora de certificados leva direto à seção', async ({ page }) => {
 })
 
 test('locale inválido resulta em 404', async ({ page }) => {
+  // Este teste faz o servidor de produção (npm run start, no webServer acima)
+  // imprimir "Error: Internal: NoFallbackError" no stderr. É um log interno do
+  // próprio Next 16 ao resolver "/es" contra o layout de "[locale]" — a rota
+  // dinâmica no nível do layout raiz (sem um app/layout.tsx acima dela) torna
+  // difícil compor um 404 consistente (ver docs de not-found.js/global-not-found.js
+  // do Next sobre "root layout defined using top-level dynamic segments").
+  // Confirmado experimentalmente: um app/not-found.tsx próprio com <html>/<body>
+  // faz o 404 renderizar um corpo customizado (e o status continua correto,
+  // 404), mas NÃO faz esse log desaparecer — então não vale mudar o código do
+  // site só por causa do log. O status HTTP abaixo é o que importa e está correto;
+  // este comentário existe para não deixar o ruído silencioso/inexplicado.
   const resposta = await page.goto('/es')
   expect(resposta?.status()).toBe(404)
 })
