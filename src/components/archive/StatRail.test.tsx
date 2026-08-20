@@ -7,9 +7,18 @@ describe('StatRail', () => {
   it('mostra a data absoluta do último texto, nunca tempo relativo', () => {
     render(<StatRail locale="pt" posts={postFixture} />)
 
-    const [ultimo] = screen.getAllByRole('definition')
-    expect(ultimo).toHaveTextContent(/^último em 12\/08\/2026$/)
+    expect(screen.getByRole('term')).toHaveTextContent('último em')
+    expect(screen.getByRole('definition')).toHaveTextContent('12/08/2026')
     expect(screen.queryByText(/há \d+ dias?/)).not.toBeInTheDocument()
+  })
+
+  it('não repete o rótulo entre o termo e a definição (leitor de tela não ouve "último em" duas vezes)', () => {
+    render(<StatRail locale="pt" posts={postFixture} />)
+
+    const termo = screen.getByRole('term')
+    const definicao = screen.getByRole('definition')
+    expect(termo.textContent).toBe('último em')
+    expect(definicao.textContent).not.toMatch(/último em/)
   })
 
   it('não mostra nenhum outro fato: só a definição da data mais recente', () => {

@@ -11,12 +11,14 @@ export function StatRail({ locale, posts }: { locale: Locale; posts: Post[] }) {
   return (
     <dl className="mt-4 font-dado text-xs text-suave">
       <div>
-        <dt className="sr-only">{t(ui.newsletter.ultimo, locale)}</dt>
+        {/* dt visível (não sr-only): antes o rótulo ficava escondido aqui E
+            repetido, por extenso, dentro de <dd> — um leitor de tela ouvia
+            "último em" duas vezes seguidas. Residue de quando a régua tinha
+            vários itens. Agora o rótulo mora só no <dt>, e "inline" nos dois
+            mantém a leitura visual em uma linha só, como antes. */}
+        <dt className="inline">{t(ui.newsletter.ultimo, locale)}</dt>{' '}
         {/* Data absoluta de propósito: o site é estático e "há N dias" congelaria no build. */}
-        <dd>
-          {t(ui.newsletter.ultimo, locale)}{' '}
-          <span className="text-frio">{formatarData(maisRecente.data, locale)}</span>
-        </dd>
+        <dd className="inline text-frio">{formatarData(maisRecente.data, locale)}</dd>
       </div>
     </dl>
   )
