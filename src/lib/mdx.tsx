@@ -89,7 +89,22 @@ export async function renderizarMdx(corpo: string): Promise<ReactElement> {
           rehypeSlug,
           rehypeSlugSemAcento,
           rehypeKatex,
-          [rehypePrettyCode, { theme: 'github-light' }],
+          // Tema único (`github-light`) fazia todo bloco com linguagem
+          // declarada renderizar claro mesmo no tema escuro do site: shiki
+          // emite `color`/`background-color` como atributo `style` inline
+          // por token, que vence qualquer regra de CSS, camada ou não.
+          // Verificado em node_modules/rehype-pretty-code/dist/index.js —
+          // com `theme` como objeto (`{ light, dark }`) o pacote passa
+          // `defaultColor: false` ao shiki (não é opção exposta aqui, é
+          // interna); e em node_modules/@shikijs/core/dist/index.mjs —
+          // `defaultColor: false` faz cada token emitir SÓ as custom
+          // properties `--shiki-light`/`--shiki-dark` (e o `<pre>` raiz
+          // `--shiki-light-bg`/`--shiki-dark-bg`), sem `color`/
+          // `background-color` fixos. O CSS do site (`.corpo-post`, em
+          // globals.css) escolhe qual variante cada tema usa; o fundo
+          // continua vindo do tom derivado já usado por todo bloco de
+          // código (`.corpo-post pre`), não das variáveis `-bg` do shiki.
+          [rehypePrettyCode, { theme: { light: 'github-light', dark: 'github-dark' } }],
         ],
       },
     },

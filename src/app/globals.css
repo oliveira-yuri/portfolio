@@ -171,6 +171,23 @@ body {
   line-height: 1.6;
 }
 
+/* Bloco com linguagem declarada (rehype-pretty-code/shiki, ver mdx.tsx).
+   `defaultColor: false` faz o shiki emitir só custom properties por token
+   (`--shiki-light`/`--shiki-dark`), sem `color` fixo — por isso a regra
+   abaixo, e não um `!important` para vencer estilo inline, já basta.
+   O fundo NÃO vem do tema do shiki: fica com o tom derivado de
+   `.corpo-post pre` acima, o mesmo do bloco sem linguagem, para os dois
+   não parecerem de sites diferentes. Só a cor de sintaxe troca por tema. */
+.corpo-post pre[data-theme] code,
+.corpo-post pre[data-theme] span {
+  color: var(--shiki-light);
+}
+
+.dark .corpo-post pre[data-theme] code,
+.dark .corpo-post pre[data-theme] span {
+  color: var(--shiki-dark);
+}
+
 /* A tabela é o único elemento que pode estourar a medida no celular. */
 .corpo-post table {
   display: block;
