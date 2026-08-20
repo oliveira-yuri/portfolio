@@ -4,24 +4,18 @@ import { StatRail } from '@/components/archive/StatRail'
 import { postFixture } from '@/test/fixtures'
 
 describe('StatRail', () => {
-  it('mostra a contagem real de textos', () => {
-    render(<StatRail locale="pt" posts={postFixture} />)
-
-    const [textos] = screen.getAllByRole('definition')
-    expect(textos).toHaveTextContent(/^3 textos$/)
-  })
-
   it('mostra a data absoluta do último texto, nunca tempo relativo', () => {
     render(<StatRail locale="pt" posts={postFixture} />)
 
-    expect(screen.getByText(/^12\/08\/2026$/)).toBeInTheDocument()
+    const [ultimo] = screen.getAllByRole('definition')
+    expect(ultimo).toHaveTextContent(/^último em 12\/08\/2026$/)
     expect(screen.queryByText(/há \d+ dias?/)).not.toBeInTheDocument()
   })
 
-  it('mostra o mês do texto mais antigo como início', () => {
+  it('não mostra nenhum outro fato: só a definição da data mais recente', () => {
     render(<StatRail locale="pt" posts={postFixture} />)
 
-    expect(screen.getByText(/^06\/2026$/)).toBeInTheDocument()
+    expect(screen.getAllByRole('definition')).toHaveLength(1)
   })
 
   it('não renderiza nada sem posts', () => {

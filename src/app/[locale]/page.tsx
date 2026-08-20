@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArchiveList } from '@/components/archive/ArchiveList'
-import { PillarCards } from '@/components/archive/PillarCards'
+import { EixoDoTempo } from '@/components/archive/EixoDoTempo'
+import { LegendaDaEscala } from '@/components/archive/LegendaDaEscala'
 import { PostRow } from '@/components/archive/PostRow'
 import { StatRail } from '@/components/archive/StatRail'
 import { ContactLinks } from '@/components/sections/ContactLinks'
@@ -33,14 +34,11 @@ export default async function NewsletterPage({ params }: { params: Promise<{ loc
             </Link>
           </li>
         </ul>
-        <StatRail locale={locale} posts={posts} />
-
-        <section className="mt-12 border-t border-fio pt-6" aria-labelledby="trilhas">
-          <h2 id="trilhas" className="font-dado text-xs uppercase tracking-widest text-suave">
-            {t(ui.newsletter.trilhas, locale)}
-          </h2>
-          <PillarCards locale={locale} posts={posts} />
-        </section>
+        <div className="mt-8">
+          <EixoDoTempo locale={locale} posts={posts} />
+          <LegendaDaEscala locale={locale} posts={posts} />
+          <StatRail locale={locale} posts={posts} />
+        </div>
 
         {destaques.length > 0 ? (
           <section className="mt-12 border-t border-fio pt-6" aria-labelledby="destaques">
@@ -55,12 +53,14 @@ export default async function NewsletterPage({ params }: { params: Promise<{ loc
           </section>
         ) : null}
 
-        <section className="mt-12 border-t border-fio pt-6" aria-labelledby="arquivo">
-          <h2 id="arquivo" className="font-dado text-xs uppercase tracking-widest text-suave">
-            {t(ui.newsletter.arquivo, locale)}
-          </h2>
-          <ArchiveList locale={locale} posts={posts} />
-        </section>
+        {posts.length > 0 ? (
+          <section className="mt-12 border-t border-fio pt-6" aria-labelledby="arquivo">
+            <h2 id="arquivo" className="font-dado text-xs uppercase tracking-widest text-suave">
+              {t(ui.newsletter.arquivo, locale)}
+            </h2>
+            <ArchiveList locale={locale} posts={posts} />
+          </section>
+        ) : null}
       </main>
       <SiteFooter locale={locale} />
     </div>
