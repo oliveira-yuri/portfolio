@@ -35,6 +35,12 @@ export const ui = {
     desde: { pt: 'desde', en: 'since' },
     ultimo: { pt: 'último em', en: 'latest on' },
     verTodas: { pt: 'Ver todas as tags', en: 'See all tags' },
+    eixoRotulo: { pt: 'Arquivo', en: 'Archive' },
+    eixoDescricao: {
+      pt: 'Um traço por texto, posicionado pela data de publicação. A densidade mostra a cadência.',
+      en: 'One mark per text, positioned by publication date. Density shows the cadence.',
+    },
+    escalaRotulo: { pt: 'Do abstrato ao aplicado', en: 'From abstract to applied' },
   },
   post: {
     nesteTexto: { pt: 'Neste texto', en: 'In this text' },
