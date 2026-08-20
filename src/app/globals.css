@@ -122,6 +122,9 @@ body {
   width: 100%;
   margin: 1.25rem 0;
   font-size: 0.9rem;
+  /* A tabela é o único elemento que pode estourar a medida no celular. */
+  display: block;
+  overflow-x: auto;
 }
 
 .corpo-post th {
@@ -186,10 +189,4 @@ body {
 .dark .corpo-post pre[data-theme] code,
 .dark .corpo-post pre[data-theme] span {
   color: var(--shiki-dark);
-}
-
-/* A tabela é o único elemento que pode estourar a medida no celular. */
-.corpo-post table {
-  display: block;
-  overflow-x: auto;
 }
