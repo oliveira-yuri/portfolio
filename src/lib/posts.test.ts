@@ -1,6 +1,7 @@
 import { mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import matter from 'gray-matter'
 import { describe, expect, it } from 'vitest'
 import { agruparPorMes, lerPosts, parLinguistico, postsDoLocale } from '@/lib/posts'
 
@@ -115,6 +116,49 @@ describe('lerPosts', () => {
     const dir = comArquivo('2026-01-01-texto.pt.mdx', `${FRONTMATTER_OK.replace('tags: [ia]', 'tags: [ia]\ncta: curso-inexistente')}`)
 
     expect(() => lerPosts(dir)).toThrow(/curso-inexistente/)
+  })
+
+  describe('atualizado', () => {
+    it('não define atualizado quando o frontmatter não declara', () => {
+      const dir = comArquivo('2026-01-01-texto.pt.mdx', FRONTMATTER_OK)
+
+      expect(lerPosts(dir)[0].atualizado).toBeUndefined()
+    })
+
+    it('aceita atualizado como string "YYYY-MM-DD" entre aspas', () => {
+      const dir = comArquivo(
+        '2026-01-01-texto.pt.mdx',
+        FRONTMATTER_OK.replace('tags: [ia]', 'tags: [ia]\natualizado: "2026-08-19"'),
+      )
+
+      expect(lerPosts(dir)[0].atualizado).toBe('2026-08-19')
+    })
+
+    it('aceita atualizado como data YAML sem aspas — o exemplo da própria spec — e normaliza para "YYYY-MM-DD"', () => {
+      const dir = comArquivo(
+        '2026-01-01-texto.pt.mdx',
+        FRONTMATTER_OK.replace('tags: [ia]', 'tags: [ia]\natualizado: 2026-08-19'),
+      )
+
+      // Confirma que o gray-matter de fato produz um objeto Date para uma
+      // data YAML sem aspas (e não uma string) — se essa premissa mudasse
+      // numa atualização do gray-matter, o teste acima falharia por um
+      // motivo diferente do que ele diz testar.
+      const bruto = matter(FRONTMATTER_OK.replace('tags: [ia]', 'tags: [ia]\natualizado: 2026-08-19'))
+      expect(bruto.data.atualizado).toBeInstanceOf(Date)
+
+      expect(lerPosts(dir)[0].atualizado).toBe('2026-08-19')
+    })
+
+    it('rejeita atualizado em formato inválido, com o arquivo nomeado no erro', () => {
+      const dir = comArquivo(
+        '2026-01-01-texto.pt.mdx',
+        FRONTMATTER_OK.replace('tags: [ia]', 'tags: [ia]\natualizado: 19/08/2026'),
+      )
+
+      expect(() => lerPosts(dir)).toThrow(/2026-01-01-texto\.pt\.mdx/)
+      expect(() => lerPosts(dir)).toThrow(/atualizado/)
+    })
   })
 })
 

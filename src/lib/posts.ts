@@ -28,6 +28,7 @@ export type Post = {
 
 const NOME = /^(\d{4}-\d{2}-\d{2})-([a-z0-9-]+)\.([a-z]{2})\.mdx$/
 const TAG = /^[a-z0-9-]+$/
+const DATA_ISO = /^\d{4}-\d{2}-\d{2}$/
 const DIRETORIO_PADRAO = 'src/content/posts'
 const LIMITE_RESUMO = 200
 /** Controle fora de tab/LF/CR: ilegal em XML 1.0 mesmo como entidade numérica (ver src/lib/feed.ts). */
@@ -53,6 +54,23 @@ function nomeDoArquivo(arquivo: string): { data: string; slug: string; locale: L
   const [, data, slug, locale] = casou
   if (!isLocale(locale)) erro(arquivo, `idioma "${locale}" não existe; use ${['pt', 'en'].join(' ou ')}`)
   return { data, slug, locale }
+}
+
+/**
+ * `atualizado` aceita `YYYY-MM-DD` como string OU como data YAML sem aspas
+ * (`atualizado: 2026-08-19`, o exemplo da própria spec) — o parser do
+ * gray-matter lê data YAML sem aspas como `Date`, não como string, então
+ * aceitar só `typeof === 'string'` descarta o valor em silêncio: sem
+ * "atualizado em" no cabeçalho, sem erro no build, e `lastModified` errado
+ * no sitemap. Este é o único módulo cuja regra é falhar o build diante de
+ * frontmatter inválido, não devolver um valor incorreto sem avisar — então
+ * qualquer forma que não seja essas duas passa por `erro()`.
+ */
+function validarAtualizado(valor: unknown, arquivo: string): string | undefined {
+  if (valor === undefined) return undefined
+  if (valor instanceof Date) return valor.toISOString().slice(0, 10)
+  if (typeof valor === 'string' && DATA_ISO.test(valor)) return valor
+  erro(arquivo, `atualizado deve ser uma data "YYYY-MM-DD" (aceita também data YAML sem aspas); recebido ${JSON.stringify(valor)}`)
 }
 
 function frontmatter(dados: Record<string, unknown>, arquivo: string) {
@@ -87,7 +105,7 @@ function frontmatter(dados: Record<string, unknown>, arquivo: string) {
     tags: tags as string[],
     destaque: dados.destaque === true,
     cta: cta as FormacaoId | undefined,
-    atualizado: typeof dados.atualizado === 'string' ? dados.atualizado : undefined,
+    atualizado: validarAtualizado(dados.atualizado, arquivo),
   }
 }
 
