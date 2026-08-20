@@ -27,4 +27,40 @@ export const ui = {
     used: { pt: 'Já usei', en: 'Have used' },
     learning: { pt: 'Estudando agora', en: 'Currently learning' },
   },
+  newsletter: {
+    trilhas: { pt: 'Trilhas', en: 'Tracks' },
+    destaques: { pt: 'Destaques', en: 'Featured' },
+    arquivo: { pt: 'Arquivo', en: 'Archive' },
+    textos: { pt: 'textos', en: 'texts' },
+    desde: { pt: 'desde', en: 'since' },
+    ultimo: { pt: 'último em', en: 'latest on' },
+    verTodas: { pt: 'Ver todas as tags', en: 'See all tags' },
+  },
+  post: {
+    nesteTexto: { pt: 'Neste texto', en: 'In this text' },
+    tempoLeitura: { pt: 'min de leitura', en: 'min read' },
+    atualizadoEm: { pt: 'atualizado em', en: 'updated on' },
+    restante: { pt: 'restante', en: 'left' },
+    notas: { pt: 'Notas', en: 'Notes' },
+    noSite: { pt: 'No site', en: 'On the site' },
+    daquiVocePodeIr: { pt: 'Daqui você pode ir para', en: 'From here you can go to' },
+    estudarAFundo: { pt: 'Se quiser estudar isso a fundo', en: 'If you want to study this in depth' },
+    divulgacao: {
+      pt: 'Divulgação: sou assistente de ensino no ibe.IA — este link é do lugar onde eu trabalho.',
+      en: 'Disclosure: I am a teaching assistant at ibe.IA — this link points to where I work.',
+    },
+    soEmPortugues: {
+      pt: 'Este texto existe apenas em português.',
+      en: 'This text is only available in Portuguese.',
+    },
+    soEmIngles: {
+      pt: 'Este texto existe apenas em inglês.',
+      en: 'This text is only available in English.',
+    },
+    lerNoIdiomaDisponivel: { pt: 'Ler em português', en: 'Read in English' },
+  },
+  nav: {
+    newsletter: { pt: 'Newsletter', en: 'Newsletter' },
+    portfolio: { pt: 'Portfólio', en: 'Portfolio' },
+  },
 } satisfies LocalizedTree
