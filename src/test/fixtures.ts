@@ -1,4 +1,5 @@
 import type { Certificate, Education, Experience, Profile, Project, SkillGroup } from '@/content/types'
+import type { Post } from '@/lib/posts'
 
 export const profileFixture: Profile = {
   name: 'Fulano de Tal',
@@ -91,5 +92,42 @@ export const certificatesFixture: Certificate[] = [
     title: { pt: 'SQL Aplicado', en: 'Applied SQL' },
     issuer: 'Exemplo Academy',
     date: '2024-09',
+  },
+]
+
+export const postFixture: Post[] = [
+  {
+    slug: 'com-cta',
+    locale: 'pt',
+    data: '2026-08-12',
+    titulo: 'Post com CTA',
+    resumo: 'Resumo do post com CTA.',
+    pilar: 'projetos',
+    tags: ['estatistica', 'esports'],
+    destaque: true,
+    cta: 'ia-para-negocios',
+    corpo: '## Uma seção\n\nCorpo.',
+  },
+  {
+    slug: 'sem-cta',
+    locale: 'pt',
+    data: '2026-07-30',
+    titulo: 'Post sem CTA',
+    resumo: 'Resumo do post sem CTA.',
+    pilar: 'academico',
+    tags: ['probabilidade'],
+    destaque: false,
+    corpo: 'Corpo sem seções.',
+  },
+  {
+    slug: 'de-ensino',
+    locale: 'pt',
+    data: '2026-06-05',
+    titulo: 'Post de ensino',
+    resumo: 'Resumo do post de ensino.',
+    pilar: 'ensino',
+    tags: ['ia', 'ensino'],
+    destaque: false,
+    corpo: 'Corpo.',
   },
 ]
