@@ -104,7 +104,28 @@ export async function renderizarMdx(corpo: string): Promise<ReactElement> {
           // globals.css) escolhe qual variante cada tema usa; o fundo
           // continua vindo do tom derivado já usado por todo bloco de
           // código (`.corpo-post pre`), não das variáveis `-bg` do shiki.
-          [rehypePrettyCode, { theme: { light: 'github-light', dark: 'github-dark' } }],
+          // `dark: 'github-dark'` falhava WCAG AA: o token de comentário
+          // (`#6A737D`, rgb(106, 115, 125)) contra o fundo derivado do bloco
+          // em modo escuro (rgb(26, 29, 32)) dá 3.52:1, abaixo dos 4.5:1
+          // exigidos para texto normal — e o bloco usa ~13.6px, abaixo do
+          // limiar de "texto grande" que relaxaria a exigência para 3:1. Não
+          // dá para sobrescrever só o token do comentário via CSS: com
+          // `defaultColor: false` (ver comentário acima) cada span shiki
+          // recebe a cor só via custom property `--shiki-dark` inline, sem
+          // classe semântica que identifique "isto é um comentário" — nada
+          // estável para selecionar.
+          //
+          // A troca teve que ser de tema inteiro, escolhida por medição
+          // (script ad hoc com `shiki.codeToTokensBase`, tema por tema,
+          // contraste WCAG contra rgb(26, 29, 32)), não por olho. Entre os
+          // temas escuros embutidos no shiki que passam 4.5:1 tanto para
+          // comentário quanto para texto comum, `github-dark-default`
+          // ("GitHub Dark Default") é o mais próximo em caráter de
+          // `github-dark` — mesma família de design do GitHub, sucessor
+          // direto do tema antigo, sem cores neon — e sobra margem
+          // confortável: comentário `#8B949E` dá 5.50:1, texto comum
+          // `#79C0FF` dá 8.70:1.
+          [rehypePrettyCode, { theme: { light: 'github-light', dark: 'github-dark-default' } }],
         ],
       },
     },
