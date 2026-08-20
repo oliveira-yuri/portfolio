@@ -23,6 +23,11 @@ export function EixoDoTempo({ locale, posts }: { locale: Locale; posts: Post[] }
   const leituras = posts.map((post) => tempoDeLeitura(post.corpo))
   const maiorLeitura = Math.max(...leituras)
 
+  // `posts` deve chegar ordenado por data DESCENDENTE (o que `lerPosts` já
+  // garante): os traços em si usam Math.min/Math.max e ficam corretos em
+  // qualquer ordem, mas estes dois extremos não recalculam nada — se a
+  // ordem vier invertida, os rótulos "mais antigo"/"mais recente" trocam de
+  // lugar silenciosamente, sem quebrar a posição das marcas.
   const maisAntigo = posts[posts.length - 1]
   const maisRecente = posts[0]
 
