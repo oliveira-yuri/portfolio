@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import NewsletterPage from '@/app/[locale]/page'
+import { postFixture } from '@/test/fixtures'
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/pt',
@@ -8,6 +9,16 @@ vi.mock('next/navigation', () => ({
     throw new Error('notFound')
   },
 }))
+
+// Único teste de rota que não mockava lerPosts — passava a asserir contra o
+// conteúdo real de src/content/posts/, que vai crescer com os próximos
+// textos e quebrar por motivo nenhum ligado ao que este teste diz testar.
+// Segue o mesmo padrão de mock dos outros testes de rota (ver
+// src/app/[locale]/tags/page.test.tsx e pares).
+vi.mock('@/lib/posts', async (importOriginal) => {
+  const original = await importOriginal<typeof import('@/lib/posts')>()
+  return { ...original, lerPosts: () => postFixture }
+})
 
 describe('Newsletter (home)', () => {
   it('mostra o nome do autor e o bloco de identidade', async () => {
