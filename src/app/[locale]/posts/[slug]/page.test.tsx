@@ -109,6 +109,36 @@ describe('página de post', () => {
     expect(link).toHaveAttribute('lang', 'en')
   })
 
+  it('mostra o rodapé com posts relacionados do mesmo idioma e o bloco do instituto quando o post declara cta', async () => {
+    render(await PostPage({ params: Promise.resolve({ locale: 'pt', slug: 'com-cta' }) }))
+
+    const relacionadosLinks = screen.getAllByRole('link', { name: /^Post (sem CTA|de ensino)$/ })
+    expect(relacionadosLinks.map((link) => link.textContent)).toEqual(['Post sem CTA', 'Post de ensino'])
+    expect(relacionadosLinks[0]).toHaveAttribute('href', '/pt/posts/sem-cta')
+    expect(relacionadosLinks[1]).toHaveAttribute('href', '/pt/posts/de-ensino')
+
+    expect(screen.getByRole('link', { name: /IA para Negócios/ })).toBeInTheDocument()
+    expect(screen.getByText(/Divulgação: sou assistente de ensino no ibe\.IA/)).toBeInTheDocument()
+  })
+
+  it('não mostra o bloco do instituto no rodapé quando o post não declara cta', async () => {
+    render(await PostPage({ params: Promise.resolve({ locale: 'pt', slug: 'sem-cta' }) }))
+
+    expect(screen.queryByRole('link', { name: /Formação/ })).not.toBeInTheDocument()
+    expect(screen.queryByText(/Divulgação/)).not.toBeInTheDocument()
+  })
+
+  it('não sugere post em outro idioma nos relacionados do rodapé', async () => {
+    render(await PostPage({ params: Promise.resolve({ locale: 'en', slug: 'com-cta' }) }))
+
+    expect(screen.getByRole('link', { name: 'English only post' })).toHaveAttribute(
+      'href',
+      '/en/posts/somente-en',
+    )
+    expect(screen.queryByText('Post sem CTA')).not.toBeInTheDocument()
+    expect(screen.queryByText('Post de ensino')).not.toBeInTheDocument()
+  })
+
   it('404 para locale inexistente', async () => {
     await expect(
       PostPage({ params: Promise.resolve({ locale: 'fr', slug: 'com-cta' }) }),

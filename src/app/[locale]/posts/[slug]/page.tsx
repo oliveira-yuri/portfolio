@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { PostFooter } from '@/components/post/PostFooter'
 import { PostHeader } from '@/components/post/PostHeader'
 import { PostToc } from '@/components/post/PostToc'
 import { SiteFooter } from '@/components/ui/SiteFooter'
@@ -8,7 +9,8 @@ import { ui } from '@/content/ui'
 import { extrairSecoes } from '@/lib/headings'
 import { htmlLang, isLocale, locales, otherLocale, t } from '@/lib/i18n'
 import { renderizarMdx } from '@/lib/mdx'
-import { lerPosts, parLinguistico } from '@/lib/posts'
+import { lerPosts, parLinguistico, postsDoLocale } from '@/lib/posts'
+import { relacionados } from '@/lib/relacionados'
 
 export const dynamicParams = false
 
@@ -41,6 +43,11 @@ export default async function PostPage({ params }: { params: Promise<{ locale: s
             <div>
               <PostHeader locale={locale} post={post} />
               <div className="corpo-post mt-8 max-w-[34em]">{await renderizarMdx(post.corpo)}</div>
+              <PostFooter
+                locale={locale}
+                post={post}
+                relacionados={relacionados(postsDoLocale(lerPosts(), locale), post)}
+              />
             </div>
             <div className="md:order-first md:sticky md:top-6 md:self-start">
               <PostToc locale={locale} secoes={extrairSecoes(post.corpo)} />
