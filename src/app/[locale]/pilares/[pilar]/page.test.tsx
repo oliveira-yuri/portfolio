@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
+import { metadataFor } from '@/lib/seo'
 import { postFixture } from '@/test/fixtures'
-import PilarPage, { dynamicParams, generateStaticParams } from './page'
+import PilarPage, { dynamicParams, generateMetadata, generateStaticParams } from './page'
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/pt/pilares/ensino',
@@ -71,5 +72,42 @@ describe('página de pilar', () => {
     await expect(
       PilarPage({ params: Promise.resolve({ locale: 'pt', pilar: 'inexistente' }) }),
     ).rejects.toThrow('notFound')
+  })
+})
+
+describe('metadados da página de pilar', () => {
+  it('declara canonical e título próprios do pilar, não os da home', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'pt', pilar: 'ensino' }) })
+
+    expect(metadata.alternates?.canonical).toBe('/pt/pilares/ensino')
+    expect(metadata.alternates?.canonical).not.toBe(metadataFor('pt').alternates?.canonical)
+    expect(metadata.title).toContain('Ensino')
+  })
+
+  it('em inglês, o canonical usa o segmento traduzido "pillars", não "pilares" — a mesma URL que o sitemap submete', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'en', pilar: 'ensino' }) })
+
+    expect(metadata.alternates?.canonical).toBe('/en/pillars/ensino')
+  })
+
+  it('o hreflang de en aponta para /pillars/, e o de pt continua em /pilares/ — as duas URLs de fato existentes', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'pt', pilar: 'ensino' }) })
+
+    expect(metadata.alternates?.languages).toMatchObject({
+      'pt-BR': '/pt/pilares/ensino',
+      en: '/en/pillars/ensino',
+    })
+  })
+
+  it('retorna metadados vazios para locale inexistente', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'fr', pilar: 'ensino' }) })
+
+    expect(metadata).toEqual({})
+  })
+
+  it('retorna metadados vazios para pilar inexistente', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'pt', pilar: 'inexistente' }) })
+
+    expect(metadata).toEqual({})
   })
 })

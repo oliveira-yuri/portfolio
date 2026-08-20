@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
+import { metadataFor } from '@/lib/seo'
 import { postFixture } from '@/test/fixtures'
-import TagPage, { dynamicParams, generateStaticParams } from './page'
+import TagPage, { dynamicParams, generateMetadata, generateStaticParams } from './page'
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/pt/tags/estatistica',
@@ -51,5 +52,27 @@ describe('página de tag', () => {
     await expect(
       TagPage({ params: Promise.resolve({ locale: 'pt', tag: 'inexistente' }) }),
     ).rejects.toThrow('notFound')
+  })
+})
+
+describe('metadados da página de tag', () => {
+  it('declara canonical e título próprios da tag, não os da home', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'pt', tag: 'estatistica' }) })
+
+    expect(metadata.alternates?.canonical).toBe('/pt/tags/estatistica')
+    expect(metadata.alternates?.canonical).not.toBe(metadataFor('pt').alternates?.canonical)
+    expect(metadata.title).toContain('#estatistica')
+  })
+
+  it('retorna metadados vazios para locale inexistente', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'fr', tag: 'estatistica' }) })
+
+    expect(metadata).toEqual({})
+  })
+
+  it('retorna metadados vazios para tag sem nenhum post nesse idioma', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'pt', tag: 'inexistente' }) })
+
+    expect(metadata).toEqual({})
   })
 })

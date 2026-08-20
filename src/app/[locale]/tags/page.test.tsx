@@ -1,7 +1,8 @@
 import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
+import { metadataFor } from '@/lib/seo'
 import { postFixture } from '@/test/fixtures'
-import TagsPage, { dynamicParams, generateStaticParams } from './page'
+import TagsPage, { dynamicParams, generateMetadata, generateStaticParams } from './page'
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/pt/tags',
@@ -50,5 +51,22 @@ describe('página de índice de tags', () => {
 
   it('404 para locale inexistente', async () => {
     await expect(TagsPage({ params: Promise.resolve({ locale: 'fr' }) })).rejects.toThrow('notFound')
+  })
+})
+
+describe('metadados da página de índice de tags', () => {
+  it('declara canonical e título próprios, não os da home', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'pt' }) })
+
+    expect(metadata.alternates?.canonical).toBe('/pt/tags')
+    expect(metadata.alternates?.canonical).not.toBe(metadataFor('pt').alternates?.canonical)
+    expect(metadata.title).not.toBe(metadataFor('pt').title)
+    expect(metadata.title).toContain('Ver todas as tags')
+  })
+
+  it('retorna metadados vazios para locale inexistente', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'fr' }) })
+
+    expect(metadata).toEqual({})
   })
 })

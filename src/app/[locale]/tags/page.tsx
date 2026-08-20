@@ -1,16 +1,29 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { SiteFooter } from '@/components/ui/SiteFooter'
 import { TopBar } from '@/components/ui/TopBar'
+import { profile } from '@/content/profile'
 import { ui } from '@/content/ui'
 import { isLocale, locales, t } from '@/lib/i18n'
 import { lerPosts, postsDoLocale } from '@/lib/posts'
+import { metadataFor } from '@/lib/seo'
 import { contarTags } from '@/lib/tags'
 
 export const dynamicParams = false
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  if (!isLocale(locale)) return {}
+
+  return metadataFor(locale, {
+    path: `/${locale}/tags`,
+    title: `${t(ui.newsletter.verTodas, locale)} — ${profile.name}`,
+  })
 }
 
 export default async function TagsPage({ params }: { params: Promise<{ locale: string }> }) {

@@ -1,15 +1,44 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ArchiveList } from '@/components/archive/ArchiveList'
 import { SiteFooter } from '@/components/ui/SiteFooter'
 import { TopBar } from '@/components/ui/TopBar'
 import { descricaoPilar } from '@/content/pilares'
-import { isLocale, locales, t } from '@/lib/i18n'
+import { profile } from '@/content/profile'
+import { htmlLang, isLocale, locales, t } from '@/lib/i18n'
 import { lerPosts, pilares, postsDoLocale, type Pilar } from '@/lib/posts'
+import { caminhoPilar } from '@/lib/routes'
+import { metadataFor } from '@/lib/seo'
 
 export const dynamicParams = false
 
 export function generateStaticParams() {
   return locales.flatMap((locale) => pilares.map((pilar) => ({ locale, pilar })))
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; pilar: string }>
+}): Promise<Metadata> {
+  const { locale, pilar } = await params
+  if (!isLocale(locale) || !(pilares as readonly string[]).includes(pilar)) return {}
+
+  const tipado = pilar as Pilar
+  const { nome } = descricaoPilar[tipado]
+
+  // Segmento de URL traduz (pilares/pillars, ver src/lib/routes.ts), então
+  // `languages` não pode ser derivado do path como nas outras 3 rotas — tem
+  // que ser calculado nos dois idiomas via `caminhoPilar`.
+  return metadataFor(locale, {
+    path: caminhoPilar(locale, tipado),
+    title: `${t(nome, locale)} — ${profile.name}`,
+    languages: {
+      [htmlLang.pt]: caminhoPilar('pt', tipado),
+      [htmlLang.en]: caminhoPilar('en', tipado),
+      'x-default': caminhoPilar('pt', tipado),
+    },
+  })
 }
 
 export default async function PilarPage({ params }: { params: Promise<{ locale: string; pilar: string }> }) {

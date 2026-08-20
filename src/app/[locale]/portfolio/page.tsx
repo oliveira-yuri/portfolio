@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { AboutSection } from '@/components/sections/AboutSection'
 import { CertificatesSection } from '@/components/sections/CertificatesSection'
@@ -15,7 +16,19 @@ import { experiences } from '@/content/experience'
 import { profile } from '@/content/profile'
 import { projects } from '@/content/projects'
 import { skillGroups } from '@/content/skills'
-import { isLocale } from '@/lib/i18n'
+import { ui } from '@/content/ui'
+import { isLocale, t } from '@/lib/i18n'
+import { metadataFor } from '@/lib/seo'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  if (!isLocale(locale)) return {}
+
+  return metadataFor(locale, {
+    path: `/${locale}/portfolio`,
+    title: `${t(ui.nav.portfolio, locale)} — ${profile.name}`,
+  })
+}
 
 export default async function PortfolioPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params

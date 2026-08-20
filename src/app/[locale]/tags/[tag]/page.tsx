@@ -1,9 +1,12 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ArchiveList } from '@/components/archive/ArchiveList'
 import { SiteFooter } from '@/components/ui/SiteFooter'
 import { TopBar } from '@/components/ui/TopBar'
+import { profile } from '@/content/profile'
 import { isLocale, locales } from '@/lib/i18n'
 import { lerPosts, postsDoLocale } from '@/lib/posts'
+import { metadataFor } from '@/lib/seo'
 import { contarTags } from '@/lib/tags'
 
 export const dynamicParams = false
@@ -13,6 +16,20 @@ export function generateStaticParams() {
   return locales.flatMap((locale) =>
     contarTags(postsDoLocale(posts, locale)).map(({ tag }) => ({ locale, tag })),
   )
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; tag: string }>
+}): Promise<Metadata> {
+  const { locale, tag } = await params
+  if (!isLocale(locale)) return {}
+
+  const existe = postsDoLocale(lerPosts(), locale).some((post) => post.tags.includes(tag))
+  if (!existe) return {}
+
+  return metadataFor(locale, { path: `/${locale}/tags/${tag}`, title: `#${tag} — ${profile.name}` })
 }
 
 export default async function TagPage({ params }: { params: Promise<{ locale: string; tag: string }> }) {
