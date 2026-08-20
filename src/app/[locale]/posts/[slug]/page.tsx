@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PostFooter } from '@/components/post/PostFooter'
@@ -11,12 +12,38 @@ import { htmlLang, isLocale, locales, otherLocale, t } from '@/lib/i18n'
 import { renderizarMdx } from '@/lib/mdx'
 import { lerPosts, parLinguistico, postsDoLocale } from '@/lib/posts'
 import { relacionados } from '@/lib/relacionados'
+import { absoluteUrl } from '@/lib/site'
 
 export const dynamicParams = false
 
 export function generateStaticParams() {
   const slugs = [...new Set(lerPosts().map((post) => post.slug))]
   return locales.flatMap((locale) => slugs.map((slug) => ({ locale, slug })))
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>
+}): Promise<Metadata> {
+  const { locale, slug } = await params
+  if (!isLocale(locale)) return {}
+
+  const par = parLinguistico(lerPosts(), slug)
+  const post = par[locale] ?? par[otherLocale(locale)]
+  if (!post) return {}
+
+  // hreflang só declara idioma que existe de fato.
+  const languages: Record<string, string> = {}
+  if (par.pt) languages[htmlLang.pt] = absoluteUrl(`/pt/posts/${slug}`)
+  if (par.en) languages[htmlLang.en] = absoluteUrl(`/en/posts/${slug}`)
+
+  return {
+    title: post.titulo,
+    description: post.resumo,
+    alternates: { canonical: `/${locale}/posts/${slug}`, languages },
+    openGraph: { title: post.titulo, description: post.resumo, type: 'article' },
+  }
 }
 
 export default async function PostPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {

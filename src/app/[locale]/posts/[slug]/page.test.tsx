@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import type { Post } from '@/lib/posts'
+import { siteUrl } from '@/lib/site'
 import { postFixture } from '@/test/fixtures'
-import PostPage, { dynamicParams, generateStaticParams } from './page'
+import PostPage, { dynamicParams, generateMetadata, generateStaticParams } from './page'
 
 const postEnComCta: Post = {
   ...postFixture[0],
@@ -149,5 +150,48 @@ describe('página de post', () => {
     await expect(
       PostPage({ params: Promise.resolve({ locale: 'pt', slug: 'inexistente' }) }),
     ).rejects.toThrow('notFound')
+  })
+})
+
+describe('metadados do post', () => {
+  it('declara hreflang para os dois idiomas quando o post existe em pt e en', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'pt', slug: 'com-cta' }) })
+
+    expect(metadata.title).toBe('Post com CTA')
+    expect(metadata.description).toBe('Resumo do post com CTA.')
+    expect(metadata.alternates?.canonical).toBe('/pt/posts/com-cta')
+    expect(metadata.alternates?.languages).toEqual({
+      'pt-BR': `${siteUrl}/pt/posts/com-cta`,
+      en: `${siteUrl}/en/posts/com-cta`,
+    })
+    expect(metadata.openGraph).toMatchObject({
+      title: 'Post com CTA',
+      description: 'Resumo do post com CTA.',
+      type: 'article',
+    })
+  })
+
+  it('não declara hreflang de en quando o post só existe em pt', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'pt', slug: 'sem-cta' }) })
+
+    expect(metadata.alternates?.languages).toEqual({ 'pt-BR': `${siteUrl}/pt/posts/sem-cta` })
+  })
+
+  it('não declara hreflang de pt quando o post só existe em en', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'en', slug: 'somente-en' }) })
+
+    expect(metadata.alternates?.languages).toEqual({ en: `${siteUrl}/en/posts/somente-en` })
+  })
+
+  it('retorna metadados vazios para locale inexistente', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'fr', slug: 'com-cta' }) })
+
+    expect(metadata).toEqual({})
+  })
+
+  it('retorna metadados vazios para slug que não existe em nenhum idioma', async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'pt', slug: 'inexistente' }) })
+
+    expect(metadata).toEqual({})
   })
 })
