@@ -12,21 +12,18 @@ export function CertificatesSection({ locale, items }: { locale: Locale; items: 
 
   return (
     <Section id="certificados" title={t(ui.sections.certificates, locale)}>
-      <ul className="grid gap-4 md:grid-cols-2">
+      <ul>
         {ordenados.map((certificate) => (
-          <li
-            key={certificate.id}
-            className="rounded-lg border border-fio bg-papel p-5 transition-colors hover:border-frio"
-          >
-            <h3 className="font-display text-xl text-tinta">{t(certificate.title, locale)}</h3>
-            <p className="mt-1 text-suave">{certificate.issuer}</p>
+          <li key={certificate.id} className="py-5">
+            <p className="font-dado text-[0.65rem] uppercase tracking-[0.14em] text-suave">{certificate.issuer}</p>
+            <h3 className="mt-0.5 font-display text-xl text-tinta">{t(certificate.title, locale)}</h3>
             <p className="mt-1 font-dado text-xs text-suave">{formatMonth(certificate.date, locale)}</p>
             {certificate.credentialUrl && (
               <a
                 href={certificate.credentialUrl}
                 target="_blank"
                 rel="noreferrer"
-                className={`mt-4 inline-block text-sm ${underlineLinkClass}`}
+                className={`mt-3 inline-block text-sm ${underlineLinkClass}`}
               >
                 {t(ui.actions.verifyCredential, locale)}
               </a>

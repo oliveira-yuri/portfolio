@@ -25,12 +25,9 @@ export function ProjectsSection({ locale, items }: { locale: Locale; items: Proj
 
   return (
     <Section id="projetos" title={t(ui.sections.projects, locale)}>
-      <ul className="space-y-10">
+      <ul>
         {sortForDisplay(items).map((project) => (
-          <li
-            key={project.slug}
-            className="rounded-lg border border-fio bg-papel p-6 transition-colors hover:border-frio md:p-8"
-          >
+          <li key={project.slug} className="py-8">
             {project.image && (
               <Image
                 src={project.image.src}
@@ -41,12 +38,10 @@ export function ProjectsSection({ locale, items }: { locale: Locale; items: Proj
                 sizes="(max-width: 768px) 100vw, 1000px"
               />
             )}
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h3 className="font-display text-2xl text-tinta">{project.title}</h3>
-              <p className="font-dado text-xs text-suave">
-                {t(project.role, locale)} · {formatPeriod(project.period, locale)}
-              </p>
-            </div>
+            <p className="font-dado text-[0.65rem] uppercase tracking-[0.14em] text-suave">
+              {t(project.role, locale)} · {formatPeriod(project.period, locale)}
+            </p>
+            <h3 className="mt-0.5 font-display text-2xl text-tinta">{project.title}</h3>
             <p className="mt-2 text-lg text-suave">{t(project.summary, locale)}</p>
             <p className="mt-4 max-w-[65ch]">{t(project.description, locale)}</p>
             <ul className="mt-5 flex flex-wrap gap-2">

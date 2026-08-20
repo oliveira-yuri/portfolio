@@ -36,15 +36,15 @@ export default async function PostOpenGraphImage({
           flexDirection: 'column',
           justifyContent: 'space-between',
           padding: '80px',
-          backgroundColor: '#faf9f6',
-          color: '#1a1a18',
+          backgroundColor: '#f1f2f0',
+          color: '#15171a',
         }}
       >
-        <div style={{ fontSize: 28, color: '#5f5e55' }}>
+        <div style={{ fontSize: 28, color: '#5c6269' }}>
           {post ? t(descricaoPilar[post.pilar].nome, activeLocale) : profile.name}
         </div>
         <div style={{ fontSize: 64, lineHeight: 1.12 }}>{post?.titulo ?? profile.name}</div>
-        <div style={{ fontSize: 28, color: '#3d5a45' }}>{profile.name}</div>
+        <div style={{ fontSize: 28, color: '#2b6a86' }}>{profile.name}</div>
       </div>
     ),
     size,

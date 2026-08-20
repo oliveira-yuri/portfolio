@@ -43,4 +43,19 @@ describe('CertificatesSection', () => {
     expect(screen.getByRole('heading', { level: 3, name: 'AI Foundations' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Verify credential' })).toBeInTheDocument()
   })
+
+  it('não usa cartão — sem borda, sem fundo elevado; o ritmo é o espaço', () => {
+    const { container } = render(<CertificatesSection locale="pt" items={certificatesFixture} />)
+
+    for (const item of container.querySelectorAll('li')) {
+      expect(item.className).not.toMatch(/border|bg-papel|rounded/)
+    }
+  })
+
+  it('mostra o emissor como rótulo monoespaçado, no lugar do rótulo de pilar do arquivo', () => {
+    render(<CertificatesSection locale="pt" items={certificatesFixture} />)
+
+    const rotulo = screen.getAllByText('Exemplo Academy')[0]
+    expect(rotulo.className).toMatch(/font-dado/)
+  })
 })

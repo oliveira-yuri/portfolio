@@ -46,8 +46,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a {
-  color: inherit;
+/* `@layer base`, não uma regra solta: Tailwind emite suas classes utilitárias
+   dentro de `@layer utilities`, e por cascade layers uma regra sem camada
+   sempre vence qualquer regra em camada, não importa a especificidade — um
+   `<a className="text-frio">` perderia silenciosamente para este reset se ele
+   ficasse fora de uma camada. Em `@layer base` (mais baixa que `utilities`),
+   o reset continua valendo por padrão, mas qualquer `text-*`/`hover:text-*`
+   aplicado a um link volta a vencer, como o nome da classe promete. */
+@layer base {
+  a {
+    color: inherit;
+  }
 }
 
 :focus-visible {
@@ -76,25 +85,15 @@ a {
   margin-top: 0.75rem;
 }
 
-/* Capitular só no primeiro parágrafo, e só quando ele não é um bloco especial. */
-.corpo-post > p:first-child::first-letter {
-  font-family: var(--font-newsreader), Georgia, serif;
-  font-size: 3.1em;
-  float: left;
-  line-height: 0.82;
-  padding: 0.18rem 0.4rem 0 0;
-  color: var(--frio);
-}
-
 .corpo-post h2 {
-  font-family: var(--font-newsreader), Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 1.6rem;
   margin: 2rem 0 0.5rem;
   scroll-margin-top: 2rem;
 }
 
 .corpo-post h3 {
-  font-family: var(--font-newsreader), Georgia, serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 1.25rem;
   margin: 1.5rem 0 0.4rem;
   scroll-margin-top: 2rem;
@@ -126,7 +125,7 @@ a {
 }
 
 .corpo-post th {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-family: var(--font-dado), ui-monospace, monospace;
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -146,20 +145,23 @@ a {
 
 .corpo-post td:not(:first-child) {
   text-align: right;
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-family: var(--font-dado), ui-monospace, monospace;
 }
 
+/* Tom derivado dos tokens existentes, não um token novo: acompanha claro e
+   escuro automaticamente. Um hex escolhido à mão precisaria de dois valores
+   e divergiria da paleta com o tempo. */
 .corpo-post :not(pre) > code {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-family: var(--font-dado), ui-monospace, monospace;
   font-size: 0.875em;
-  background: var(--papel);
+  background: color-mix(in srgb, var(--tinta) 3%, var(--papel));
   border: 1px solid var(--fio);
   border-radius: 2px;
   padding: 0.05rem 0.3rem;
 }
 
 .corpo-post pre {
-  background: var(--papel);
+  background: color-mix(in srgb, var(--tinta) 3%, var(--papel));
   border: 1px solid var(--fio);
   border-radius: 3px;
   padding: 0.9rem 1rem;

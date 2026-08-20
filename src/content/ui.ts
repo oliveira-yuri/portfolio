@@ -28,11 +28,9 @@ export const ui = {
     learning: { pt: 'Estudando agora', en: 'Currently learning' },
   },
   newsletter: {
-    trilhas: { pt: 'Trilhas', en: 'Tracks' },
     destaques: { pt: 'Destaques', en: 'Featured' },
     arquivo: { pt: 'Arquivo', en: 'Archive' },
     textos: { pt: 'textos', en: 'texts' },
-    desde: { pt: 'desde', en: 'since' },
     ultimo: { pt: 'último em', en: 'latest on' },
     verTodas: { pt: 'Ver todas as tags', en: 'See all tags' },
     eixoRotulo: { pt: 'Cadência', en: 'Cadence' },

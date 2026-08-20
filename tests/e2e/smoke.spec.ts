@@ -121,7 +121,10 @@ test('da newsletter até o post, com fórmula e índice', async ({ page }) => {
   await page.goto('/pt')
 
   await expect(page.getByRole('heading', { level: 1, name: 'Yuri Oliveira' })).toBeVisible()
-  await expect(page.getByRole('heading', { level: 2, name: 'Trilhas' })).toBeVisible()
+  // "Trilhas" era o rótulo dos cartões de pilar removidos na T5 do redesenho
+  // Intervalo; "Destaques" é a seção que hoje existe e que contém o link
+  // clicado logo abaixo.
+  await expect(page.getByRole('heading', { level: 2, name: 'Destaques' })).toBeVisible()
 
   await page.getByRole('link', { name: 'Post de verificação' }).first().click()
 

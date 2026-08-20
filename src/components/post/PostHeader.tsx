@@ -2,16 +2,19 @@ import Link from 'next/link'
 import { descricaoPilar } from '@/content/pilares'
 import { ui } from '@/content/ui'
 import { formatarData } from '@/lib/date'
+import { classesDoPilar } from '@/lib/escala'
 import { type Locale, t } from '@/lib/i18n'
 import type { Post } from '@/lib/posts'
 import { caminhoPilar } from '@/lib/routes'
 import { tempoDeLeitura } from '@/lib/reading'
 
 export function PostHeader({ locale, post }: { locale: Locale; post: Post }) {
+  const { texto: classePilar } = classesDoPilar(post.pilar)
+
   return (
     <header>
       <p className="font-dado text-[0.7rem] uppercase tracking-widest text-suave">
-        <Link href={caminhoPilar(locale, post.pilar)} className="text-frio">
+        <Link href={caminhoPilar(locale, post.pilar)} className={classePilar}>
           {t(descricaoPilar[post.pilar].nome, locale)}
         </Link>
         {' · '}

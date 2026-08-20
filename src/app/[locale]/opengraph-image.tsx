@@ -27,12 +27,12 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ loc
           flexDirection: 'column',
           justifyContent: 'center',
           padding: '80px',
-          backgroundColor: '#faf9f6',
-          color: '#1a1a18',
+          backgroundColor: '#f1f2f0',
+          color: '#15171a',
         }}
       >
         <div style={{ fontSize: 84, lineHeight: 1.1 }}>{profile.name}</div>
-        <div style={{ marginTop: 24, fontSize: 40, color: '#3d5a45' }}>{t(profile.headline, activeLocale)}</div>
+        <div style={{ marginTop: 24, fontSize: 40, color: '#2b6a86' }}>{t(profile.headline, activeLocale)}</div>
       </div>
     ),
     size,

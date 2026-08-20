@@ -88,4 +88,28 @@ describe('ProjectsSection', () => {
     expect(screen.getByRole('link', { name: 'Ver demo' })).toHaveAttribute('href', 'https://somente-demo.exemplo.com')
     expect(screen.queryByRole('link', { name: 'Ver código' })).not.toBeInTheDocument()
   })
+
+  it('não usa cartão — sem borda, sem fundo elevado; o ritmo é o espaço', () => {
+    const { container } = render(<ProjectsSection locale="pt" items={projectFixture} />)
+
+    // A lista externa (um projeto por item) vem primeiro no documento; as
+    // tags de tecnologia são `<li>` de uma lista ANINHADA dentro de cada
+    // projeto e legitimamente têm borda — são pílulas, não o cartão do
+    // projeto. `:scope > li` restringe aos filhos diretos da lista externa.
+    const listaDeProjetos = container.querySelector('ul')
+    expect(listaDeProjetos).not.toBeNull()
+
+    const itens = listaDeProjetos?.querySelectorAll(':scope > li') ?? []
+    expect(itens).toHaveLength(projectFixture.length)
+    for (const item of itens) {
+      expect(item.className).not.toMatch(/border|bg-papel|rounded/)
+    }
+  })
+
+  it('mostra papel e período como rótulo monoespaçado acima do título', () => {
+    render(<ProjectsSection locale="pt" items={projectFixture} />)
+
+    const rotulo = screen.getAllByText(/Projeto pessoal/)[0]
+    expect(rotulo.className).toMatch(/font-dado/)
+  })
 })

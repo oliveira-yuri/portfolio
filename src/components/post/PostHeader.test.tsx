@@ -30,4 +30,12 @@ describe('PostHeader', () => {
 
     expect(screen.getByText(/atualizado em 19\/08\/2026/)).toBeInTheDocument()
   })
+
+  it('colore o rótulo do pilar pelo polo da escala, não por uma cor fixa', () => {
+    render(<PostHeader locale="pt" post={postFixture[0]} />)
+
+    // postFixture[0].pilar é 'projetos', que mapeia para o polo quente — se o
+    // rótulo estivesse fixo em text-frio (o polo frio), esta asserção falha.
+    expect(screen.getByRole('link', { name: 'Projetos' })).toHaveClass('text-quente')
+  })
 })
