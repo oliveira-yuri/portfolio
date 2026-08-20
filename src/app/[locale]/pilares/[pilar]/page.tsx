@@ -5,6 +5,7 @@ import { SiteFooter } from '@/components/ui/SiteFooter'
 import { TopBar } from '@/components/ui/TopBar'
 import { descricaoPilar } from '@/content/pilares'
 import { profile } from '@/content/profile'
+import { ui } from '@/content/ui'
 import { htmlLang, isLocale, locales, t } from '@/lib/i18n'
 import { lerPosts, pilares, postsDoLocale, type Pilar } from '@/lib/posts'
 import { caminhoPilar } from '@/lib/routes'
@@ -54,7 +55,15 @@ export default async function PilarPage({ params }: { params: Promise<{ locale: 
       <main id="main" className="pb-16">
         <h1 className="font-display text-3xl text-tinta">{t(nome, locale)}</h1>
         <p className="mt-2 max-w-2xl text-suave">{t(descricao, locale)}</p>
-        <ArchiveList locale={locale} posts={posts} />
+        {/* ArchiveList emite <h3> por mês — precisa de uma seção com <h2> aqui
+            embaixo do <h1>, senão pula um nível (WCAG 1.3.1). Mesmo padrão de
+            src/app/[locale]/page.tsx. */}
+        <section className="mt-8" aria-labelledby="arquivo">
+          <h2 id="arquivo" className="font-dado text-xs uppercase tracking-widest text-suave">
+            {t(ui.newsletter.arquivo, locale)}
+          </h2>
+          <ArchiveList locale={locale} posts={posts} />
+        </section>
       </main>
       <SiteFooter locale={locale} />
     </div>

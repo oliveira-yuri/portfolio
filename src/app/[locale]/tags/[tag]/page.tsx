@@ -4,7 +4,8 @@ import { ArchiveList } from '@/components/archive/ArchiveList'
 import { SiteFooter } from '@/components/ui/SiteFooter'
 import { TopBar } from '@/components/ui/TopBar'
 import { profile } from '@/content/profile'
-import { isLocale, locales } from '@/lib/i18n'
+import { ui } from '@/content/ui'
+import { isLocale, locales, t } from '@/lib/i18n'
 import { lerPosts, postsDoLocale } from '@/lib/posts'
 import { metadataFor } from '@/lib/seo'
 import { contarTags } from '@/lib/tags'
@@ -44,7 +45,15 @@ export default async function TagPage({ params }: { params: Promise<{ locale: st
       <TopBar locale={locale} />
       <main id="main" className="pb-16">
         <h1 className="font-dado text-2xl text-frio">#{tag}</h1>
-        <ArchiveList locale={locale} posts={posts} />
+        {/* ArchiveList emite <h3> por mês — precisa de uma seção com <h2> aqui
+            embaixo do <h1>, senão pula um nível (WCAG 1.3.1). Mesmo padrão de
+            src/app/[locale]/page.tsx. */}
+        <section className="mt-8" aria-labelledby="arquivo">
+          <h2 id="arquivo" className="font-dado text-xs uppercase tracking-widest text-suave">
+            {t(ui.newsletter.arquivo, locale)}
+          </h2>
+          <ArchiveList locale={locale} posts={posts} />
+        </section>
       </main>
       <SiteFooter locale={locale} />
     </div>

@@ -62,6 +62,19 @@ describe('página de pilar', () => {
     expect(screen.queryByRole('listitem')).not.toBeInTheDocument()
   })
 
+  it('não pula nível de título entre o <h1> do pilar e o <h3> de cada mês do ArchiveList (WCAG 1.3.1)', async () => {
+    render(await PilarPage({ params: Promise.resolve({ locale: 'pt', pilar: 'academico' }) }))
+
+    const niveis = screen.getAllByRole('heading').map((heading) => Number(heading.tagName[1]))
+    for (let i = 1; i < niveis.length; i++) {
+      expect(niveis[i] - niveis[i - 1]).toBeLessThanOrEqual(1)
+    }
+    // Confirma que a asserção acima é significativa: existe de fato um h2
+    // entre o h1 e o h3 de mês, não é só ausência de headings.
+    expect(niveis).toContain(2)
+    expect(niveis).toContain(3)
+  })
+
   it('404 para locale inexistente', async () => {
     await expect(PilarPage({ params: Promise.resolve({ locale: 'fr', pilar: 'ensino' }) })).rejects.toThrow(
       'notFound',
