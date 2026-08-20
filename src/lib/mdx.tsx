@@ -23,9 +23,10 @@ import rehypePrettyCode from 'rehype-pretty-code'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
+import { Figura } from '@/components/post/Figura'
 
-/** Componentes disponíveis dentro de qualquer MDX. Cresce na Task 9. */
-export const componentesMdx: MDXComponents = {}
+/** Componentes disponíveis dentro de qualquer MDX. */
+export const componentesMdx: MDXComponents = { Figura }
 
 /**
  * Formato mínimo de um nó hast que `rehypeSlugSemAcento` precisa tocar:
@@ -76,6 +77,15 @@ export async function renderizarMdx(corpo: string): Promise<ReactElement> {
     source: corpo,
     components: componentesMdx,
     options: {
+      // `next-mdx-remote` bloqueia expressões JS em atributos JSX por padrão
+      // (`blockJS: true`), para o caso de MDX vindo de origem não confiável.
+      // Isso descarta silenciosamente atributos como `numero={1}` — não vira
+      // string vazia nem erro, o atributo inteiro some antes de chegar ao
+      // componente. O corpo dos posts é escrito só por quem mantém este
+      // repositório (não há CMS nem conteúdo de terceiros), então
+      // habilitamos expressões; `blockDangerousJS` (default true) continua
+      // barrando `eval`, `Function`, `process` etc. como defesa em camadas.
+      blockJS: false,
       mdxOptions: {
         remarkPlugins: [remarkMath, remarkGfm],
         rehypePlugins: [

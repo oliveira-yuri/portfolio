@@ -63,3 +63,112 @@ a {
     scroll-behavior: auto !important;
   }
 }
+
+/* Corpo de post. O MDX gera HTML sem classes, então a estilização é por elemento. */
+.corpo-post {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+.corpo-post > p + p {
+  margin-top: 0.75rem;
+}
+
+/* Capitular só no primeiro parágrafo, e só quando ele não é um bloco especial. */
+.corpo-post > p:first-child::first-letter {
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-size: 3.1em;
+  float: left;
+  line-height: 0.82;
+  padding: 0.18rem 0.4rem 0 0;
+  color: var(--accent);
+}
+
+.corpo-post h2 {
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-size: 1.6rem;
+  margin: 2rem 0 0.5rem;
+  scroll-margin-top: 2rem;
+}
+
+.corpo-post h3 {
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-size: 1.25rem;
+  margin: 1.5rem 0 0.4rem;
+  scroll-margin-top: 2rem;
+}
+
+.corpo-post a {
+  color: var(--accent);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.corpo-post ul,
+.corpo-post ol {
+  margin: 0.75rem 0 0.75rem 1.25rem;
+  list-style: revert;
+}
+
+.corpo-post blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 0.9rem;
+  color: var(--muted);
+  margin: 1rem 0;
+}
+
+.corpo-post table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.25rem 0;
+  font-size: 0.9rem;
+}
+
+.corpo-post th {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+  font-weight: 400;
+  border-bottom: 1px solid var(--ink);
+  padding: 0.3rem 0.6rem 0.3rem 0;
+}
+
+.corpo-post td {
+  padding: 0.3rem 0.6rem 0.3rem 0;
+  border-bottom: 1px dotted var(--line);
+  /* Números de resultado alinham por dígito; é metade da leitura de uma tabela. */
+  font-variant-numeric: tabular-nums;
+}
+
+.corpo-post td:not(:first-child) {
+  text-align: right;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+.corpo-post :not(pre) > code {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.875em;
+  background: var(--raised);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 0.05rem 0.3rem;
+}
+
+.corpo-post pre {
+  background: var(--raised);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0.9rem 1rem;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* A tabela é o único elemento que pode estourar a medida no celular. */
+.corpo-post table {
+  display: block;
+  overflow-x: auto;
+}
