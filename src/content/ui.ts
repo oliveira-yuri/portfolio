@@ -45,8 +45,6 @@ export const ui = {
     tempoLeitura: { pt: 'min de leitura', en: 'min read' },
     tempoLeituraCurto: { pt: 'min', en: 'min' },
     atualizadoEm: { pt: 'atualizado em', en: 'updated on' },
-    restante: { pt: 'restante', en: 'left' },
-    notas: { pt: 'Notas', en: 'Notes' },
     noSite: { pt: 'No site', en: 'On the site' },
     daquiVocePodeIr: { pt: 'Daqui você pode ir para', en: 'From here you can go to' },
     estudarAFundo: { pt: 'Se quiser estudar isso a fundo', en: 'If you want to study this in depth' },

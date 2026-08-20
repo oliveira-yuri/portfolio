@@ -1,6 +1,8 @@
 'use client'
 
-// Único componente cliente do projeto: marcar a seção atual exige observar o scroll.
+// Único componente cliente ADICIONADO por este trabalho (LocaleSwitch,
+// ThemeToggle e Reveal já eram client antes): marcar a seção atual exige
+// observar o scroll, o que só é possível com um efeito no cliente.
 import { useEffect, useState } from 'react'
 import { ui } from '@/content/ui'
 import { type Locale, t } from '@/lib/i18n'
