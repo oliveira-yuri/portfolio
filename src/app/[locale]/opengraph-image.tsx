@@ -19,6 +19,12 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ loc
 
   return new ImageResponse(
     (
+      // Satori (o renderizador desta rota) não lê custom property CSS, só
+      // recebe uma cor literal — mesma restrição documentada em
+      // src/lib/mdx.tsx sobre o tema do bloco de código. Hex fixos abaixo
+      // espelham src/app/globals.css: #f1f2f0 = --papel, #15171a = --tinta,
+      // #2b6a86 = --frio (modo claro). Se esses tokens mudarem, atualizar
+      // aqui também — não há como um ler o outro nesta pilha.
       <div
         style={{
           width: '100%',
