@@ -30,4 +30,22 @@ describe('renderizarMdx', () => {
     expect(screen.getByRole('table')).toBeInTheDocument()
     expect(screen.getByRole('columnheader', { name: 'Log loss' })).toBeInTheDocument()
   })
+
+  it('legenda uma <Figura numero="1"> de verdade pelo pipeline de MDX — não só via prop React direta', async () => {
+    // O motivo de `numero` aceitar string (ver comentário em Figura.tsx): o
+    // pipeline de MDX (blockJS, ligado por padrão) descarta em silêncio
+    // qualquer atributo JSX escrito como expressão (`numero={1}`) — só um
+    // literal string (`numero="1"`) sobrevive vindo de um post real. Um
+    // teste que só passa `numero={1}` como prop React direta (como
+    // Figura.test.tsx) nunca exercita esse caminho.
+    const { container } = render(
+      await renderizarMdx(
+        '<Figura numero="1" legenda="Legenda de verificação.">\n  <svg role="img" aria-label="gráfico de teste" />\n</Figura>',
+      ),
+    )
+
+    const legenda = container.querySelector('figcaption')
+    expect(legenda?.textContent).toContain('Fig. 1')
+    expect(legenda?.textContent).toContain('Legenda de verificação.')
+  })
 })

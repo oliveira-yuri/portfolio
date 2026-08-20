@@ -131,6 +131,9 @@ test('da newsletter até o post, com fórmula e índice', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1, name: 'Post de verificação' })).toBeVisible()
   await expect(page.locator('.katex').first()).toBeVisible()
   await expect(page.getByRole('navigation', { name: 'Neste texto' })).toBeVisible()
+  await expect(page.getByRole('figure')).toBeVisible()
+  await expect(page.getByText('Fig. 1')).toBeVisible()
+  await expect(page.getByText(/Figura de verificação, usada só pelo teste de ponta a ponta\./)).toBeVisible()
   await expect(page.getByText(/Divulgação/)).toBeVisible()
 })
 
