@@ -13,8 +13,8 @@ export function StatRail({ locale, posts }: { locale: Locale; posts: Post[] }) {
     <dl className="mt-4 flex flex-wrap gap-x-6 gap-y-1 font-mono text-xs text-muted">
       <div>
         <dt className="sr-only">{t(ui.newsletter.textos, locale)}</dt>
-        <dd className="text-accent">
-          {posts.length} {t(ui.newsletter.textos, locale)}
+        <dd>
+          <span className="text-accent">{posts.length}</span> {t(ui.newsletter.textos, locale)}
         </dd>
       </div>
       <div>

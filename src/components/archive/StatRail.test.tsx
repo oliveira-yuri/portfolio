@@ -7,7 +7,8 @@ describe('StatRail', () => {
   it('mostra a contagem real de textos', () => {
     render(<StatRail locale="pt" posts={postFixture} />)
 
-    expect(screen.getByText(/3 textos/)).toBeInTheDocument()
+    const [textos] = screen.getAllByRole('definition')
+    expect(textos).toHaveTextContent('3 textos')
   })
 
   it('mostra a data absoluta do último texto, nunca tempo relativo', () => {
