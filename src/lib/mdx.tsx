@@ -16,9 +16,6 @@
 // resolvido, renderizável nos dois contextos. A interface pública
 // (`renderizarMdx`, `componentesMdx`) não muda.
 import { compileMDX } from 'next-mdx-remote/rsc'
-import { headingRank } from 'hast-util-heading-rank'
-import { visit } from 'unist-util-visit'
-import type { Root } from 'hast'
 import type { MDXComponents } from 'mdx/types'
 import type { ReactElement } from 'react'
 import rehypeKatex from 'rehype-katex'
@@ -30,23 +27,47 @@ import remarkMath from 'remark-math'
 /** Componentes disponíveis dentro de qualquer MDX. Cresce na Task 9. */
 export const componentesMdx: MDXComponents = {}
 
+/**
+ * Formato mínimo de um nó hast que `rehypeSlugSemAcento` precisa tocar:
+ * elemento com `tagName`/`properties`, mais uma lista opcional de filhos.
+ * Declarado localmente para não depender do pacote `hast` (nem de
+ * `@types/hast`) só para andar na árvore — este projeto mantém a lista de
+ * dependências deliberadamente enxuta.
+ */
+interface NoHast {
+  type: string
+  tagName?: string
+  properties?: Record<string, unknown>
+  children?: NoHast[]
+}
+
+const PADRAO_TAG_DE_TITULO = /^h[1-6]$/
+
 function removerAcentos(texto: string): string {
   return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+}
+
+function normalizarIdsDeTitulo(no: NoHast): void {
+  if (no.tagName && PADRAO_TAG_DE_TITULO.test(no.tagName) && typeof no.properties?.id === 'string') {
+    no.properties.id = removerAcentos(no.properties.id)
+  }
+
+  for (const filho of no.children ?? []) {
+    normalizarIdsDeTitulo(filho)
+  }
 }
 
 /**
  * `rehype-slug` usa `github-slugger`, que preserva acentuação (ex.: "seção"
  * vira o id "seção", não "secao") — não expõe opção para mudar isso. Como
  * âncoras do site devem ser só ASCII, normalizamos o id logo depois que
- * `rehype-slug` o gera, sem reimplementar a lógica de deduplicação dele.
+ * `rehype-slug` o gera, com uma varredura recursiva local em vez de
+ * `unist-util-visit`/`hast-util-heading-rank` — sem reimplementar a lógica
+ * de deduplicação do `rehype-slug`, só ajustando o texto do id já atribuído.
  */
 function rehypeSlugSemAcento() {
-  return (tree: Root) => {
-    visit(tree, 'element', (node) => {
-      if (headingRank(node) && typeof node.properties.id === 'string') {
-        node.properties.id = removerAcentos(node.properties.id)
-      }
-    })
+  return (tree: NoHast) => {
+    normalizarIdsDeTitulo(tree)
   }
 }
 
