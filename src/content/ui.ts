@@ -45,6 +45,7 @@ export const ui = {
   post: {
     nesteTexto: { pt: 'Neste texto', en: 'In this text' },
     tempoLeitura: { pt: 'min de leitura', en: 'min read' },
+    tempoLeituraCurto: { pt: 'min', en: 'min' },
     atualizadoEm: { pt: 'atualizado em', en: 'updated on' },
     restante: { pt: 'restante', en: 'left' },
     notas: { pt: 'Notas', en: 'Notes' },

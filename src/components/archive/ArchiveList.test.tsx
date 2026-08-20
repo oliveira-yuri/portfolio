@@ -22,4 +22,10 @@ describe('ArchiveList', () => {
 
     expect(container).toBeEmptyDOMElement()
   })
+
+  it('marca o mês com régua, que é onde a régua deve existir', () => {
+    const { container } = render(<ArchiveList locale="pt" posts={postFixture} />)
+
+    expect(container.querySelector('h3')?.className ?? '').toMatch(/border-b/)
+  })
 })

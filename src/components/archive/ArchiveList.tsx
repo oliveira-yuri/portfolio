@@ -9,8 +9,8 @@ export function ArchiveList({ locale, posts }: { locale: Locale; posts: Post[] }
   return (
     <div>
       {agruparPorMes(posts).map((grupo) => (
-        <section key={`${grupo.ano}-${grupo.mes}`} className="mt-6">
-          <h3 className="font-dado text-xs uppercase tracking-widest text-suave">
+        <section key={`${grupo.ano}-${grupo.mes}`} className="mt-10">
+          <h3 className="border-b border-fio pb-1.5 font-dado text-[0.65rem] uppercase tracking-[0.16em] text-suave">
             {formatarMesLongo(grupo.ano, grupo.mes, locale)}
           </h3>
           <ul className="mt-2">
