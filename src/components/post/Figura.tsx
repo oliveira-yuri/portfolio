@@ -20,8 +20,8 @@ export function Figura({
   return (
     <figure className="my-6">
       {children}
-      <figcaption className="mt-2 border-t border-line pt-2 font-mono text-xs text-muted">
-        <span className="text-ink">Fig. {Number(numero)}</span> — {legenda}
+      <figcaption className="mt-2 border-t border-fio pt-2 font-dado text-xs text-suave">
+        <span className="text-tinta">Fig. {Number(numero)}</span> — {legenda}
       </figcaption>
     </figure>
   )

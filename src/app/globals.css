@@ -5,42 +5,44 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --surface: #faf9f6;
-  --raised: #ffffff;
-  --ink: #1a1a18;
-  --muted: #5f5e55;
-  --line: #e2e0d8;
-  --accent: #3d5a45;
+  --papel: #f1f2f0;
+  --tinta: #15171a;
+  --suave: #5c6269;
+  --fio: #d4d7d5;
+  --frio: #2b6a86;
+  --quente: #9c4a6e;
 }
 
 .dark {
-  --surface: #131512;
-  --raised: #1b1e1a;
-  --ink: #edebe3;
-  --muted: #a3a198;
-  --line: #2c302b;
-  --accent: #9cbfa3;
+  --papel: #14171a;
+  --tinta: #e8eae8;
+  --suave: #949b9f;
+  --fio: #262b2e;
+  --frio: #6fb3ce;
+  --quente: #d98aa8;
 }
 
 @theme inline {
-  --color-surface: var(--surface);
-  --color-raised: var(--raised);
-  --color-ink: var(--ink);
-  --color-muted: var(--muted);
-  --color-line: var(--line);
-  --color-accent: var(--accent);
+  --color-papel: var(--papel);
+  --color-tinta: var(--tinta);
+  --color-suave: var(--suave);
+  --color-fio: var(--fio);
+  --color-frio: var(--frio);
+  --color-quente: var(--quente);
 
-  --font-sans: var(--font-inter);
-  --font-serif: var(--font-instrument-serif);
-  --font-mono: var(--font-jetbrains-mono);
+  /* Nomeados por papel, não por classificação tipográfica: `font-sans`
+     apontando para uma serifada seria um nome que mente. */
+  --font-display: var(--font-newsreader);
+  --font-texto: var(--font-newsreader);
+  --font-dado: var(--font-plex-mono);
 }
 
 body {
-  background-color: var(--surface);
-  color: var(--ink);
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  background-color: var(--papel);
+  color: var(--tinta);
+  font-family: var(--font-texto), Georgia, 'Times New Roman', serif;
   font-size: 1.0625rem;
-  line-height: 1.7;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -49,7 +51,7 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--frio);
   outline-offset: 3px;
 }
 
@@ -76,31 +78,31 @@ a {
 
 /* Capitular só no primeiro parágrafo, e só quando ele não é um bloco especial. */
 .corpo-post > p:first-child::first-letter {
-  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-family: var(--font-newsreader), Georgia, serif;
   font-size: 3.1em;
   float: left;
   line-height: 0.82;
   padding: 0.18rem 0.4rem 0 0;
-  color: var(--accent);
+  color: var(--frio);
 }
 
 .corpo-post h2 {
-  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-family: var(--font-newsreader), Georgia, serif;
   font-size: 1.6rem;
   margin: 2rem 0 0.5rem;
   scroll-margin-top: 2rem;
 }
 
 .corpo-post h3 {
-  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-family: var(--font-newsreader), Georgia, serif;
   font-size: 1.25rem;
   margin: 1.5rem 0 0.4rem;
   scroll-margin-top: 2rem;
 }
 
 .corpo-post a {
-  color: var(--accent);
-  border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--frio);
+  border-bottom: 1px solid color-mix(in srgb, var(--frio) 40%, transparent);
 }
 
 .corpo-post ul,
@@ -110,9 +112,9 @@ a {
 }
 
 .corpo-post blockquote {
-  border-left: 2px solid var(--accent);
+  border-left: 2px solid var(--frio);
   padding-left: 0.9rem;
-  color: var(--muted);
+  color: var(--suave);
   margin: 1rem 0;
 }
 
@@ -124,41 +126,41 @@ a {
 }
 
 .corpo-post th {
-  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--suave);
   text-align: left;
   font-weight: 400;
-  border-bottom: 1px solid var(--ink);
+  border-bottom: 1px solid var(--tinta);
   padding: 0.3rem 0.6rem 0.3rem 0;
 }
 
 .corpo-post td {
   padding: 0.3rem 0.6rem 0.3rem 0;
-  border-bottom: 1px dotted var(--line);
+  border-bottom: 1px dotted var(--fio);
   /* Números de resultado alinham por dígito; é metade da leitura de uma tabela. */
   font-variant-numeric: tabular-nums;
 }
 
 .corpo-post td:not(:first-child) {
   text-align: right;
-  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
 }
 
 .corpo-post :not(pre) > code {
-  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
   font-size: 0.875em;
-  background: var(--raised);
-  border: 1px solid var(--line);
+  background: var(--papel);
+  border: 1px solid var(--fio);
   border-radius: 2px;
   padding: 0.05rem 0.3rem;
 }
 
 .corpo-post pre {
-  background: var(--raised);
-  border: 1px solid var(--line);
+  background: var(--papel);
+  border: 1px solid var(--fio);
   border-radius: 3px;
   padding: 0.9rem 1rem;
   margin: 1.25rem 0;

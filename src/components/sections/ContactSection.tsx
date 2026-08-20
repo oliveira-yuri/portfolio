@@ -7,7 +7,7 @@ import { type Locale, t } from '@/lib/i18n'
 export function ContactSection({ locale, profile }: { locale: Locale; profile: Profile }) {
   return (
     <Section id="contato" title={t(ui.sections.contact, locale)}>
-      <p className="max-w-[65ch] text-lg text-muted">{t(profile.intent, locale)}</p>
+      <p className="max-w-[65ch] text-lg text-suave">{t(profile.intent, locale)}</p>
       <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-3">
         <ContactLinks locale={locale} profile={profile} order={['email', 'linkedin', 'github', 'cv']} />
       </ul>

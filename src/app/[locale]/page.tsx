@@ -23,28 +23,28 @@ export default async function NewsletterPage({ params }: { params: Promise<{ loc
     <div className="mx-auto w-full max-w-[68rem] px-6 md:px-10">
       <TopBar locale={locale} />
       <main id="main" className="pb-16">
-        <h1 className="font-serif text-4xl text-ink md:text-5xl">{profile.name}</h1>
-        <p className="mt-3 max-w-2xl text-muted">{t(profile.headline, locale)}</p>
-        <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-accent">
+        <h1 className="font-display text-4xl text-tinta md:text-5xl">{profile.name}</h1>
+        <p className="mt-3 max-w-2xl text-suave">{t(profile.headline, locale)}</p>
+        <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2 font-dado text-xs text-frio">
           <ContactLinks locale={locale} profile={profile} order={['cv', 'github', 'linkedin']} />
           <li>
-            <Link href={`/${locale}/portfolio`} className="border-b border-accent/40">
+            <Link href={`/${locale}/portfolio`} className="border-b border-frio/40">
               {t(ui.nav.portfolio, locale)}
             </Link>
           </li>
         </ul>
         <StatRail locale={locale} posts={posts} />
 
-        <section className="mt-12 border-t border-line pt-6" aria-labelledby="trilhas">
-          <h2 id="trilhas" className="font-mono text-xs uppercase tracking-widest text-muted">
+        <section className="mt-12 border-t border-fio pt-6" aria-labelledby="trilhas">
+          <h2 id="trilhas" className="font-dado text-xs uppercase tracking-widest text-suave">
             {t(ui.newsletter.trilhas, locale)}
           </h2>
           <PillarCards locale={locale} posts={posts} />
         </section>
 
         {destaques.length > 0 ? (
-          <section className="mt-12 border-t border-line pt-6" aria-labelledby="destaques">
-            <h2 id="destaques" className="font-mono text-xs uppercase tracking-widest text-muted">
+          <section className="mt-12 border-t border-fio pt-6" aria-labelledby="destaques">
+            <h2 id="destaques" className="font-dado text-xs uppercase tracking-widest text-suave">
               {t(ui.newsletter.destaques, locale)}
             </h2>
             <ul className="mt-2">
@@ -55,8 +55,8 @@ export default async function NewsletterPage({ params }: { params: Promise<{ loc
           </section>
         ) : null}
 
-        <section className="mt-12 border-t border-line pt-6" aria-labelledby="arquivo">
-          <h2 id="arquivo" className="font-mono text-xs uppercase tracking-widest text-muted">
+        <section className="mt-12 border-t border-fio pt-6" aria-labelledby="arquivo">
+          <h2 id="arquivo" className="font-dado text-xs uppercase tracking-widest text-suave">
             {t(ui.newsletter.arquivo, locale)}
           </h2>
           <ArchiveList locale={locale} posts={posts} />

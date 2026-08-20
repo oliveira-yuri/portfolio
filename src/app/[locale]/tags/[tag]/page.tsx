@@ -26,7 +26,7 @@ export default async function TagPage({ params }: { params: Promise<{ locale: st
     <div className="mx-auto w-full max-w-[68rem] px-6 md:px-10">
       <TopBar locale={locale} />
       <main id="main" className="pb-16">
-        <h1 className="font-mono text-2xl text-accent">#{tag}</h1>
+        <h1 className="font-dado text-2xl text-frio">#{tag}</h1>
         <ArchiveList locale={locale} posts={posts} />
       </main>
       <SiteFooter locale={locale} />

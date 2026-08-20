@@ -19,7 +19,7 @@ function Cadencia({ posts, meses }: { posts: Post[]; meses: string[] }) {
       {[...contagens].reverse().map((valor, i) => (
         <span
           key={meses[i]}
-          className="w-1 bg-accent/40"
+          className="w-1 bg-frio/40"
           style={{ height: `${Math.max(8, (valor / maximo) * 100)}%` }}
         />
       ))}
@@ -41,15 +41,15 @@ export function PillarCards({ locale, posts }: { locale: Locale; posts: Post[] }
           <li key={pilar}>
             <Link
               href={caminhoPilar(locale, pilar)}
-              className="block h-full rounded border border-line bg-raised p-4 transition-colors hover:border-accent"
+              className="block h-full rounded border border-fio bg-papel p-4 transition-colors hover:border-frio"
             >
-              <span className="font-mono text-2xl text-accent">
+              <span className="font-dado text-2xl text-frio">
                 {String(doPilar.length).padStart(2, '0')}
               </span>
-              <span className="mt-1 block font-mono text-[0.65rem] uppercase tracking-widest text-muted">
+              <span className="mt-1 block font-dado text-[0.65rem] uppercase tracking-widest text-suave">
                 {t(nome, locale)}
               </span>
-              <span className="mt-1 block text-sm text-muted">{t(descricao, locale)}</span>
+              <span className="mt-1 block text-sm text-suave">{t(descricao, locale)}</span>
               {mostrarCadencia ? <Cadencia posts={doPilar} meses={meses} /> : null}
             </Link>
           </li>

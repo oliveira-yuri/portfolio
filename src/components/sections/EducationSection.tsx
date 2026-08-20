@@ -8,11 +8,11 @@ export function EducationSection({ locale, education }: { locale: Locale; educat
   return (
     <Section id="formacao" title={t(ui.sections.education, locale)}>
       <div className="grid gap-2 md:grid-cols-[10rem_1fr] md:gap-8">
-        <p className="font-mono text-xs text-muted md:pt-2">{formatPeriod(education.period, locale)}</p>
+        <p className="font-dado text-xs text-suave md:pt-2">{formatPeriod(education.period, locale)}</p>
         <div>
-          <h3 className="font-serif text-2xl text-ink">{t(education.degree, locale)}</h3>
-          <p className="mt-1 text-muted">{education.institution}</p>
-          <p className="mt-1 font-mono text-xs text-accent">{t(education.status, locale)}</p>
+          <h3 className="font-display text-2xl text-tinta">{t(education.degree, locale)}</h3>
+          <p className="mt-1 text-suave">{education.institution}</p>
+          <p className="mt-1 font-dado text-xs text-frio">{t(education.status, locale)}</p>
         </div>
       </div>
     </Section>

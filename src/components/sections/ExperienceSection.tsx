@@ -11,16 +11,16 @@ export function ExperienceSection({ locale, items }: { locale: Locale; items: Ex
       <ol className="space-y-12">
         {sortByPeriodDesc(items).map((item) => (
           <li key={item.id} className="grid gap-2 md:grid-cols-[10rem_1fr] md:gap-8">
-            <p className="font-mono text-xs text-muted md:pt-2">{formatPeriod(item.period, locale)}</p>
+            <p className="font-dado text-xs text-suave md:pt-2">{formatPeriod(item.period, locale)}</p>
             <div>
-              <h3 className="font-serif text-2xl text-ink">{t(item.role, locale)}</h3>
-              <p className="mt-1 text-muted">
+              <h3 className="font-display text-2xl text-tinta">{t(item.role, locale)}</h3>
+              <p className="mt-1 text-suave">
                 {item.organizationUrl ? (
                   <a
                     href={item.organizationUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="border-b border-line transition-colors hover:border-accent hover:text-accent"
+                    className="border-b border-fio transition-colors hover:border-frio hover:text-frio"
                   >
                     {item.organization}
                   </a>
@@ -28,7 +28,7 @@ export function ExperienceSection({ locale, items }: { locale: Locale; items: Ex
                   item.organization
                 )}
               </p>
-              <ul className="mt-4 max-w-[65ch] list-disc space-y-2 pl-5 marker:text-accent">
+              <ul className="mt-4 max-w-[65ch] list-disc space-y-2 pl-5 marker:text-frio">
                 {item.highlights.map((highlight, index) => (
                   <li key={index}>{t(highlight, locale)}</li>
                 ))}

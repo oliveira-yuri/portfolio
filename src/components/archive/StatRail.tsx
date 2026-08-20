@@ -10,17 +10,17 @@ export function StatRail({ locale, posts }: { locale: Locale; posts: Post[] }) {
   const maisAntigo = posts[posts.length - 1]
 
   return (
-    <dl className="mt-4 flex flex-wrap gap-x-6 gap-y-1 font-mono text-xs text-muted">
+    <dl className="mt-4 flex flex-wrap gap-x-6 gap-y-1 font-dado text-xs text-suave">
       <div>
         <dt className="sr-only">{t(ui.newsletter.textos, locale)}</dt>
         <dd>
-          <span className="text-accent">{posts.length}</span> {t(ui.newsletter.textos, locale)}
+          <span className="text-frio">{posts.length}</span> {t(ui.newsletter.textos, locale)}
         </dd>
       </div>
       <div>
         <dt className="sr-only">{t(ui.newsletter.desde, locale)}</dt>
         <dd>
-          {t(ui.newsletter.desde, locale)} <span className="text-accent">{formatarMesAno(maisAntigo.data)}</span>
+          {t(ui.newsletter.desde, locale)} <span className="text-frio">{formatarMesAno(maisAntigo.data)}</span>
         </dd>
       </div>
       <div>
@@ -28,7 +28,7 @@ export function StatRail({ locale, posts }: { locale: Locale; posts: Post[] }) {
         {/* Data absoluta de propósito: o site é estático e "há N dias" congelaria no build. */}
         <dd>
           {t(ui.newsletter.ultimo, locale)}{' '}
-          <span className="text-accent">{formatarData(maisRecente.data, locale)}</span>
+          <span className="text-frio">{formatarData(maisRecente.data, locale)}</span>
         </dd>
       </div>
     </dl>

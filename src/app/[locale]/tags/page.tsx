@@ -23,14 +23,14 @@ export default async function TagsPage({ params }: { params: Promise<{ locale: s
     <div className="mx-auto w-full max-w-[68rem] px-6 md:px-10">
       <TopBar locale={locale} />
       <main id="main" className="pb-16">
-        <h1 className="font-serif text-3xl text-ink">{t(ui.newsletter.verTodas, locale)}</h1>
-        <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 font-mono text-sm">
+        <h1 className="font-display text-3xl text-tinta">{t(ui.newsletter.verTodas, locale)}</h1>
+        <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 font-dado text-sm">
           {tags.map(({ tag, total }) => (
             <li key={tag}>
-              <Link href={`/${locale}/tags/${tag}`} className="text-accent">
+              <Link href={`/${locale}/tags/${tag}`} className="text-frio">
                 #{tag}
               </Link>{' '}
-              <span className="text-muted tabular-nums">{total}</span>
+              <span className="text-suave tabular-nums">{total}</span>
             </li>
           ))}
         </ul>

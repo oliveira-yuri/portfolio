@@ -16,11 +16,11 @@ export function CertificatesSection({ locale, items }: { locale: Locale; items: 
         {ordenados.map((certificate) => (
           <li
             key={certificate.id}
-            className="rounded-lg border border-line bg-raised p-5 transition-colors hover:border-accent"
+            className="rounded-lg border border-fio bg-papel p-5 transition-colors hover:border-frio"
           >
-            <h3 className="font-serif text-xl text-ink">{t(certificate.title, locale)}</h3>
-            <p className="mt-1 text-muted">{certificate.issuer}</p>
-            <p className="mt-1 font-mono text-xs text-muted">{formatMonth(certificate.date, locale)}</p>
+            <h3 className="font-display text-xl text-tinta">{t(certificate.title, locale)}</h3>
+            <p className="mt-1 text-suave">{certificate.issuer}</p>
+            <p className="mt-1 font-dado text-xs text-suave">{formatMonth(certificate.date, locale)}</p>
             {certificate.credentialUrl && (
               <a
                 href={certificate.credentialUrl}

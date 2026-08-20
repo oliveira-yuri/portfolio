@@ -39,15 +39,15 @@ export function PostToc({
   if (secoes.length === 0) return null
 
   return (
-    <nav aria-label={t(ui.post.nesteTexto, locale)} className="font-mono text-xs">
-      <p className="uppercase tracking-widest text-muted">{t(ui.post.nesteTexto, locale)}</p>
-      <ul className="mt-3 space-y-2 border-l border-line pl-3">
+    <nav aria-label={t(ui.post.nesteTexto, locale)} className="font-dado text-xs">
+      <p className="uppercase tracking-widest text-suave">{t(ui.post.nesteTexto, locale)}</p>
+      <ul className="mt-3 space-y-2 border-l border-fio pl-3">
         {secoes.map((secao) => (
           <li key={secao.id}>
             <a
               href={`#${secao.id}`}
               aria-current={secao.id === atual ? 'true' : undefined}
-              className={secao.id === atual ? 'text-accent' : 'text-muted'}
+              className={secao.id === atual ? 'text-frio' : 'text-suave'}
             >
               {secao.texto}
             </a>

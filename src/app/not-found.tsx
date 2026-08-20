@@ -19,17 +19,17 @@ import '../app/globals.css'
 export default function NotFound() {
   return (
     <html lang="pt-BR">
-      <body className="bg-surface text-ink">
+      <body className="bg-papel text-tinta">
         <div className="mx-auto flex min-h-screen max-w-2xl flex-col justify-center px-6 py-16">
-          <p className="font-mono text-xs tracking-widest text-muted uppercase">404</p>
-          <h1 className="mt-4 font-serif text-4xl text-ink md:text-5xl">Página não encontrada</h1>
-          <p className="mt-5 max-w-prose text-lg text-muted">
+          <p className="font-dado text-xs tracking-widest text-suave uppercase">404</p>
+          <h1 className="mt-4 font-display text-4xl text-tinta md:text-5xl">Página não encontrada</h1>
+          <p className="mt-5 max-w-prose text-lg text-suave">
             Esta página não existe ou foi movida. Volte para o início.
           </p>
           <p className="mt-8">
             <Link
               href="/pt"
-              className="border-b border-line pb-0.5 transition-colors hover:border-accent hover:text-accent"
+              className="border-b border-fio pb-0.5 transition-colors hover:border-frio hover:text-frio"
             >
               Voltar para o início
             </Link>

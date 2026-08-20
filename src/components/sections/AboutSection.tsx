@@ -10,7 +10,7 @@ export function AboutSection({ locale, profile }: { locale: Locale; profile: Pro
         {profile.bio.map((paragrafo, index) => (
           <p key={index}>{t(paragrafo, locale)}</p>
         ))}
-        <p className="font-serif text-xl text-accent">{t(profile.intent, locale)}</p>
+        <p className="font-display text-xl text-frio">{t(profile.intent, locale)}</p>
       </div>
     </Section>
   )

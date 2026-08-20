@@ -10,8 +10,8 @@ import { tempoDeLeitura } from '@/lib/reading'
 export function PostHeader({ locale, post }: { locale: Locale; post: Post }) {
   return (
     <header>
-      <p className="font-mono text-[0.7rem] uppercase tracking-widest text-muted">
-        <Link href={caminhoPilar(locale, post.pilar)} className="text-accent">
+      <p className="font-dado text-[0.7rem] uppercase tracking-widest text-suave">
+        <Link href={caminhoPilar(locale, post.pilar)} className="text-frio">
           {t(descricaoPilar[post.pilar].nome, locale)}
         </Link>
         {' · '}
@@ -29,9 +29,9 @@ export function PostHeader({ locale, post }: { locale: Locale; post: Post }) {
           </>
         ) : null}
       </p>
-      <h1 className="mt-2 max-w-[24em] font-serif text-3xl text-ink md:text-4xl">{post.titulo}</h1>
-      <p className="mt-2 max-w-2xl text-muted">{post.resumo}</p>
-      <ul className="mt-3 flex flex-wrap gap-x-3 font-mono text-xs text-accent/90">
+      <h1 className="mt-2 max-w-[24em] font-display text-3xl text-tinta md:text-4xl">{post.titulo}</h1>
+      <p className="mt-2 max-w-2xl text-suave">{post.resumo}</p>
+      <ul className="mt-3 flex flex-wrap gap-x-3 font-dado text-xs text-frio/90">
         {post.tags.map((tag) => (
           <li key={tag}>
             <Link href={`/${locale}/tags/${tag}`}>#{tag}</Link>

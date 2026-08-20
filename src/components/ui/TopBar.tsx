@@ -9,7 +9,7 @@ export function TopBar({ locale }: { locale: Locale }) {
   return (
     <header className="flex items-center justify-between gap-2 py-6">
       <SkipLink locale={locale} />
-      <nav className="flex gap-4 font-mono text-xs text-muted">
+      <nav className="flex gap-4 font-dado text-xs text-suave">
         <Link href={`/${locale}`}>{t(ui.nav.newsletter, locale)}</Link>
         <Link href={`/${locale}/portfolio`}>{t(ui.nav.portfolio, locale)}</Link>
       </nav>

@@ -29,7 +29,7 @@ export function ProjectsSection({ locale, items }: { locale: Locale; items: Proj
         {sortForDisplay(items).map((project) => (
           <li
             key={project.slug}
-            className="rounded-lg border border-line bg-raised p-6 transition-colors hover:border-accent md:p-8"
+            className="rounded-lg border border-fio bg-papel p-6 transition-colors hover:border-frio md:p-8"
           >
             {project.image && (
               <Image
@@ -37,17 +37,17 @@ export function ProjectsSection({ locale, items }: { locale: Locale; items: Proj
                 alt={t(project.image.alt, locale)}
                 width={project.image.width}
                 height={project.image.height}
-                className="mb-6 h-auto w-full rounded border border-line"
+                className="mb-6 h-auto w-full rounded border border-fio"
                 sizes="(max-width: 768px) 100vw, 1000px"
               />
             )}
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h3 className="font-serif text-2xl text-ink">{project.title}</h3>
-              <p className="font-mono text-xs text-muted">
+              <h3 className="font-display text-2xl text-tinta">{project.title}</h3>
+              <p className="font-dado text-xs text-suave">
                 {t(project.role, locale)} · {formatPeriod(project.period, locale)}
               </p>
             </div>
-            <p className="mt-2 text-lg text-muted">{t(project.summary, locale)}</p>
+            <p className="mt-2 text-lg text-suave">{t(project.summary, locale)}</p>
             <p className="mt-4 max-w-[65ch]">{t(project.description, locale)}</p>
             <ul className="mt-5 flex flex-wrap gap-2">
               {project.tech.map((tech) => (

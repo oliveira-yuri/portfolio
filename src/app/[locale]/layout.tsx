@@ -32,7 +32,7 @@ export default async function LocaleLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="bg-surface text-ink">
+      <body className="bg-papel text-tinta">
         <script
           type="application/ld+json"
           // Conteúdo real já contém '<' (ex.: profile.headline.pt tem "<curso>"),

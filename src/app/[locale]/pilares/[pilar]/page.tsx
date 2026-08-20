@@ -23,8 +23,8 @@ export default async function PilarPage({ params }: { params: Promise<{ locale: 
     <div className="mx-auto w-full max-w-[68rem] px-6 md:px-10">
       <TopBar locale={locale} />
       <main id="main" className="pb-16">
-        <h1 className="font-serif text-3xl text-ink">{t(nome, locale)}</h1>
-        <p className="mt-2 max-w-2xl text-muted">{t(descricao, locale)}</p>
+        <h1 className="font-display text-3xl text-tinta">{t(nome, locale)}</h1>
+        <p className="mt-2 max-w-2xl text-suave">{t(descricao, locale)}</p>
         <ArchiveList locale={locale} posts={posts} />
       </main>
       <SiteFooter locale={locale} />

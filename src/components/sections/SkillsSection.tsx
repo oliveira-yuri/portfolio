@@ -16,7 +16,7 @@ export function SkillsSection({ locale, groups }: { locale: Locale; groups: Skil
       <div className="space-y-8">
         {ordenados.map((group) => (
           <div key={group.level} className="grid gap-3 md:grid-cols-[14rem_1fr] md:gap-8">
-            <h3 className="font-mono text-xs tracking-widest text-muted uppercase md:pt-1">
+            <h3 className="font-dado text-xs tracking-widest text-suave uppercase md:pt-1">
               {t(ui.skillLevels[group.level], locale)}
             </h3>
             <ul className="flex flex-wrap gap-2">

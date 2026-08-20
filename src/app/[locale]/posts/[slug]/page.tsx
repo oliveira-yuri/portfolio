@@ -83,11 +83,11 @@ export default async function PostPage({ params }: { params: Promise<{ locale: s
         ) : (
           // Não é 404: o texto existe, só não neste idioma.
           <div className="max-w-2xl">
-            <h1 className="font-serif text-3xl text-ink">{alternativo!.titulo}</h1>
-            <p className="mt-4 text-muted">
+            <h1 className="font-display text-3xl text-tinta">{alternativo!.titulo}</h1>
+            <p className="mt-4 text-suave">
               {t(alternativo!.locale === 'pt' ? ui.post.soEmPortugues : ui.post.soEmIngles, locale)}
             </p>
-            <p className="mt-4 font-mono text-xs">
+            <p className="mt-4 font-dado text-xs">
               {/* O rótulo do link está no idioma do conteúdo alternativo, não no
                   idioma da página (ver `lerNoIdiomaDisponivel` em content/ui.ts),
                   então precisa de `lang` próprio — do contrário um leitor de
@@ -97,7 +97,7 @@ export default async function PostPage({ params }: { params: Promise<{ locale: s
               <Link
                 href={`/${alternativo!.locale}/posts/${slug}`}
                 lang={htmlLang[alternativo!.locale]}
-                className="text-accent"
+                className="text-frio"
               >
                 {t(ui.post.lerNoIdiomaDisponivel, alternativo!.locale)}
               </Link>
