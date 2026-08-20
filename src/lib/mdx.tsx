@@ -23,6 +23,7 @@ import rehypePrettyCode from 'rehype-pretty-code'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
+import { bundledThemes, type ThemeRegistrationRaw } from 'shiki'
 import { Figura } from '@/components/post/Figura'
 
 /** Componentes disponíveis dentro de qualquer MDX. */
@@ -72,7 +73,74 @@ function rehypeSlugSemAcento() {
   }
 }
 
+/**
+ * Nenhum tema claro embutido no shiki chega a 4.5:1 (WCAG AA) no token de
+ * comentário contra o fundo derivado do bloco em modo claro — medido para
+ * os 21 temas `type: "light"` do pacote (ver task-8-report.md); `github-light`,
+ * o tema em produção, mede 4.04:1, e o candidato mais próximo do limiar
+ * (`light-plus`) para em 4.31:1. Como não existe tema pronto que passe, a
+ * saída não é trocar de tema — é pegar o registro do `github-light` já
+ * embutido no shiki (sem vendorizar cópia) e sobrescrever só a cor das
+ * regras de comentário para `#5c6269`: a cor do token `--suave` do site em
+ * modo claro (ver `src/app/globals.css`), a mesma usada em toda a prosa
+ * secundária. Raciocínio semântico antes de numérico — um comentário de
+ * código É prosa secundária.
+ *
+ * O hex é fixo de propósito, não lido de `--suave`: shiki não lê custom
+ * property CSS, só recebe uma string de cor no registro do tema e a emite
+ * inline por token (ver comentário sobre `defaultColor: false` abaixo). Se
+ * `--suave` mudar em `globals.css`, este valor precisa ser atualizado junto
+ * à mão — não há como um ler o outro nesta pilha.
+ *
+ * Única regra de `tokenColors` com escopo de comentário neste tema
+ * (inspecionado via `node`, não assumido — ver task-8-report.md): escopo
+ * `["comment", "punctuation.definition.comment", "string.comment"]`,
+ * `foreground` único `#6a737d`. Escopo TextMate casa por prefixo, então
+ * `"comment"` sozinho já cobre variantes mais específicas que gramáticas de
+ * linguagem emitem (`comment.line`, `comment.block`,
+ * `comment.block.documentation` etc.) — não há uma segunda regra escondida
+ * para corrigir.
+ */
+const COR_COMENTARIO_CLARO = '#5c6269'
+
+let temaClaroDoBlocoDeCodigoPromise: Promise<ThemeRegistrationRaw> | undefined
+
+function obterTemaClaroDoBlocoDeCodigo(): Promise<ThemeRegistrationRaw> {
+  if (!temaClaroDoBlocoDeCodigoPromise) {
+    temaClaroDoBlocoDeCodigoPromise = (async () => {
+      const base = (await bundledThemes['github-light']()).default
+      const regrasOriginais = base.tokenColors ?? base.settings ?? []
+      let regraDeComentarioEncontrada = false
+
+      const regras = regrasOriginais.map((regra) => {
+        const escopos = Array.isArray(regra.scope) ? regra.scope : regra.scope ? [regra.scope] : []
+        if (!escopos.includes('comment')) {
+          return regra
+        }
+        regraDeComentarioEncontrada = true
+        return { ...regra, settings: { ...regra.settings, foreground: COR_COMENTARIO_CLARO } }
+      })
+
+      if (!regraDeComentarioEncontrada) {
+        // `github-light` mudou de formato desde a última verificação — a
+        // regra de escopo "comment" que este patch depende de encontrar não
+        // está mais lá. Falhar alto em vez de silenciosamente devolver o
+        // tema sem o ajuste de contraste.
+        throw new Error(
+          'github-light: regra de tokenColors com escopo "comment" não encontrada — obterTemaClaroDoBlocoDeCodigo precisa ser revisada.',
+        )
+      }
+
+      return { ...base, tokenColors: regras } as ThemeRegistrationRaw
+    })()
+  }
+
+  return temaClaroDoBlocoDeCodigoPromise
+}
+
 export async function renderizarMdx(corpo: string): Promise<ReactElement> {
+  const temaClaroDoBlocoDeCodigo = await obterTemaClaroDoBlocoDeCodigo()
+
   const { content } = await compileMDX({
     source: corpo,
     components: componentesMdx,
@@ -125,7 +193,7 @@ export async function renderizarMdx(corpo: string): Promise<ReactElement> {
           // direto do tema antigo, sem cores neon — e sobra margem
           // confortável: comentário `#8B949E` dá 5.50:1, texto comum
           // `#79C0FF` dá 8.70:1.
-          [rehypePrettyCode, { theme: { light: 'github-light', dark: 'github-dark-default' } }],
+          [rehypePrettyCode, { theme: { light: temaClaroDoBlocoDeCodigo, dark: 'github-dark-default' } }],
         ],
       },
     },
