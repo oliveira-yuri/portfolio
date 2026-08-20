@@ -296,8 +296,12 @@ seção.
 
 1. **Identidade** — nome em display, três a quatro linhas, links para
    currículo, GitHub, LinkedIn e Portfólio.
-2. **Eixo do tempo** com legenda em monoespaçada: total de textos à esquerda,
-   período à direita.
+2. **Eixo do tempo**, sob o título "Cadência", com legenda em monoespaçada:
+   total de textos à esquerda, período à direita. O rótulo é "Cadência" e não
+   "Arquivo" porque é o que o gráfico mostra de fato — densidade de publicação
+   ao longo do tempo. "Arquivo" fica com a lista cronológica, que é o que esse
+   nome descreve. Dois `h2` com o mesmo texto na mesma página seriam um sumário
+   ambíguo para quem navega por cabeçalhos.
 3. **Legenda da escala** — os três pilares como pontos da escala divergente,
    cada um linkando para sua página. Substitui os cartões de trilha da versão
    anterior: com o eixo do tempo acima, três cartões repetiam a mesma
