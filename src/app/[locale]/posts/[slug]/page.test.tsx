@@ -61,6 +61,16 @@ describe('página de post', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Post com CTA' })).toBeInTheDocument()
     expect(container.querySelector('.corpo-post')).not.toBeNull()
     expect(screen.getByRole('heading', { level: 2, name: 'Uma seção' })).toBeInTheDocument()
+    // Índice de seções: presente quando o post tem título de nível 2, com âncora casando o id da seção.
+    expect(screen.getByRole('navigation', { name: 'Neste texto' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Uma seção' })).toHaveAttribute('href', '#uma-secao')
+  })
+
+  it('não renderiza índice de seções quando o post não tem título de nível 2', async () => {
+    render(await PostPage({ params: Promise.resolve({ locale: 'pt', slug: 'sem-cta' }) }))
+
+    expect(screen.getByRole('heading', { level: 1, name: 'Post sem CTA' })).toBeInTheDocument()
+    expect(screen.queryByRole('navigation', { name: 'Neste texto' })).not.toBeInTheDocument()
   })
 
   it('não retorna 404 para um post que só existe em português; mostra aviso em inglês e link para o pt', async () => {

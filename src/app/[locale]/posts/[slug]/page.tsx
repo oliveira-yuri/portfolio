@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PostHeader } from '@/components/post/PostHeader'
+import { PostToc } from '@/components/post/PostToc'
 import { SiteFooter } from '@/components/ui/SiteFooter'
 import { TopBar } from '@/components/ui/TopBar'
 import { ui } from '@/content/ui'
+import { extrairSecoes } from '@/lib/headings'
 import { htmlLang, isLocale, locales, otherLocale, t } from '@/lib/i18n'
 import { renderizarMdx } from '@/lib/mdx'
 import { lerPosts, parLinguistico } from '@/lib/posts'
@@ -30,9 +32,14 @@ export default async function PostPage({ params }: { params: Promise<{ locale: s
       <TopBar locale={locale} />
       <main id="main" className="pb-16">
         {post ? (
-          <article>
-            <PostHeader locale={locale} post={post} />
-            <div className="corpo-post mt-8 max-w-[34em]">{await renderizarMdx(post.corpo)}</div>
+          <article className="grid gap-8 md:grid-cols-[9.5rem_1fr]">
+            <div className="md:sticky md:top-6 md:self-start">
+              <PostToc locale={locale} secoes={extrairSecoes(post.corpo)} />
+            </div>
+            <div>
+              <PostHeader locale={locale} post={post} />
+              <div className="corpo-post mt-8 max-w-[34em]">{await renderizarMdx(post.corpo)}</div>
+            </div>
           </article>
         ) : (
           // Não é 404: o texto existe, só não neste idioma.
