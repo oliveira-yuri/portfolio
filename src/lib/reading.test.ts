@@ -17,4 +17,10 @@ describe('tempoDeLeitura', () => {
 
     expect(tempoDeLeitura(comCodigo)).toBe(1)
   })
+
+  it('também ignora bloco de código cercado por ~~~, não só por crases', () => {
+    const comCodigo = `Texto curto.\n\n~~~ts\n${'const x = 1\n'.repeat(300)}~~~`
+
+    expect(tempoDeLeitura(comCodigo)).toBe(1)
+  })
 })
