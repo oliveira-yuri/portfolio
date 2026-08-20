@@ -77,15 +77,12 @@ export async function renderizarMdx(corpo: string): Promise<ReactElement> {
     source: corpo,
     components: componentesMdx,
     options: {
-      // `next-mdx-remote` bloqueia expressões JS em atributos JSX por padrão
-      // (`blockJS: true`), para o caso de MDX vindo de origem não confiável.
-      // Isso descarta silenciosamente atributos como `numero={1}` — não vira
-      // string vazia nem erro, o atributo inteiro some antes de chegar ao
-      // componente. O corpo dos posts é escrito só por quem mantém este
-      // repositório (não há CMS nem conteúdo de terceiros), então
-      // habilitamos expressões; `blockDangerousJS` (default true) continua
-      // barrando `eval`, `Function`, `process` etc. como defesa em camadas.
-      blockJS: false,
+      // `blockJS` fica no default (`true`): `next-mdx-remote` descarta
+      // silenciosamente qualquer expressão JS em MDX — atributo JSX escrito
+      // como `prop={expressão}` e interpolação solta `{expr}` no corpo —
+      // sem erro nem aviso. Não desativamos essa proteção; componentes que
+      // precisam de um valor não-string (ver `Figura`) recebem string e
+      // convertem por conta própria.
       mdxOptions: {
         remarkPlugins: [remarkMath, remarkGfm],
         rehypePlugins: [

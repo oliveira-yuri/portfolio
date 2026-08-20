@@ -4,7 +4,7 @@ import { PostHeader } from '@/components/post/PostHeader'
 import { SiteFooter } from '@/components/ui/SiteFooter'
 import { TopBar } from '@/components/ui/TopBar'
 import { ui } from '@/content/ui'
-import { isLocale, locales, otherLocale, t } from '@/lib/i18n'
+import { htmlLang, isLocale, locales, otherLocale, t } from '@/lib/i18n'
 import { renderizarMdx } from '@/lib/mdx'
 import { lerPosts, parLinguistico } from '@/lib/posts'
 
@@ -42,7 +42,17 @@ export default async function PostPage({ params }: { params: Promise<{ locale: s
               {t(alternativo!.locale === 'pt' ? ui.post.soEmPortugues : ui.post.soEmIngles, locale)}
             </p>
             <p className="mt-4 font-mono text-xs">
-              <Link href={`/${alternativo!.locale}/posts/${slug}`} className="text-accent">
+              {/* O rótulo do link está no idioma do conteúdo alternativo, não no
+                  idioma da página (ver `lerNoIdiomaDisponivel` em content/ui.ts),
+                  então precisa de `lang` próprio — do contrário um leitor de
+                  tela lê "Ler em português" com fonemas de inglês quando a
+                  página está em lang="en" (WCAG 3.1.2). Mesmo padrão de
+                  `LocaleSwitch.tsx`. */}
+              <Link
+                href={`/${alternativo!.locale}/posts/${slug}`}
+                lang={htmlLang[alternativo!.locale]}
+                className="text-accent"
+              >
                 {t(ui.post.lerNoIdiomaDisponivel, alternativo!.locale)}
               </Link>
             </p>

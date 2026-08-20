@@ -68,10 +68,10 @@ describe('página de post', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: 'Post sem CTA' })).toBeInTheDocument()
     expect(screen.getByText('This text is only available in Portuguese.')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Ler em português' })).toHaveAttribute(
-      'href',
-      '/pt/posts/sem-cta',
-    )
+    const link = screen.getByRole('link', { name: 'Ler em português' })
+    expect(link).toHaveAttribute('href', '/pt/posts/sem-cta')
+    // Página em lang="en", mas o rótulo do link está em português (WCAG 3.1.2).
+    expect(link).toHaveAttribute('lang', 'pt-BR')
   })
 
   it('não retorna 404 para um post que só existe em inglês; mostra aviso em português e link para o en', async () => {
@@ -79,10 +79,10 @@ describe('página de post', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: 'English only post' })).toBeInTheDocument()
     expect(screen.getByText('Este texto existe apenas em inglês.')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Read in English' })).toHaveAttribute(
-      'href',
-      '/en/posts/somente-en',
-    )
+    const link = screen.getByRole('link', { name: 'Read in English' })
+    expect(link).toHaveAttribute('href', '/en/posts/somente-en')
+    // Página em lang="pt-BR", mas o rótulo do link está em inglês (WCAG 3.1.2).
+    expect(link).toHaveAttribute('lang', 'en')
   })
 
   it('404 para locale inexistente', async () => {
