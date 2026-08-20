@@ -39,7 +39,7 @@ ibe.IA. Secundário significa que ele **nunca** se sobrepõe à leitura; a seç�
 | Fluxo de publicação | Arquivo novo, commit, push | Sem CMS, sem banco, sem painel. Versionado, e o deploy é automático. |
 | Idiomas | PT e EN, com post podendo existir em um só | Alcance internacional sem obrigar tradução de tudo. |
 | Taxonomia | Pilar fechado (1 por post) + tags livres (1–4) | Pilar é tipado e governa navegação e visual; tag livre nunca governa layout. |
-| Home | Identidade curta + trilhas + destaques + arquivo | Recrutador se localiza em segundos; leitor recorrente rola para o conteúdo. Nenhuma seção "sobre mim" além do bloco de identidade. |
+| Home | Identidade curta + eixo do tempo + legenda da escala + destaques + arquivo | Recrutador se localiza em segundos; leitor recorrente rola para o conteúdo. Nenhuma seção "sobre mim" além do bloco de identidade. |
 | Página de post | Coluna única + índice de seções fixo | Texto técnico longo se navega melhor com índice. Material de apoio fica no fluxo do texto. |
 | Ligação com o ibe.IA | Bloco no fim do post, por pilar, opt-in por texto | Não interrompe a leitura, alcança o leitor mais qualificado, e nunca aparece sem o autor pedir. |
 | Data do post | Somente no nome do arquivo | Fonte única de verdade; os arquivos ordenam cronologicamente no editor. |
@@ -162,9 +162,9 @@ src/
     reading.ts                    # tempo de leitura
     routes.ts                     # tradução de segmento: pilares ↔ pillars
   components/
-    archive/                      # PillarCards, ArchiveList, PostRow, StatRail
-    post/                         # PostHeader, PostToc, PostBody, PostFooter,
-                                  # Figura, Formula
+    archive/                      # EixoDoTempo, LegendaDaEscala, ArchiveList,
+                                  # PostRow, StatRail
+    post/                         # PostHeader, PostToc, PostFooter, Figura
 ```
 
 ### Duas regras estruturais
@@ -209,7 +209,7 @@ biblioteca vive em `lib/mdx.tsx`** — trocá-la é mexer em um arquivo.
 
 ```
 /                          → 308 para /pt                     (já existe)
-/[locale]                  → Newsletter: identidade, trilhas, destaques, arquivo
+/[locale]                  → Newsletter: identidade, cadência, destaques, arquivo
 /[locale]/posts/[slug]     → post
 /[locale]/tags             → índice de tags com contagem
 /[locale]/tags/[tag]       → posts da tag
@@ -341,8 +341,10 @@ Três regras, e todas são verificadas por teste:
 3. **Vínculo declarado.** O bloco sempre acompanha a divulgação de que o autor
    trabalha no instituto.
 
-O catálogo de formações vive em `content/formacoes.ts`, com título e descrição
-em `Localized`. `lib/cta.ts` resolve a formação e monta a URL com
+O catálogo de formações vive em `content/formacoes.ts`. A **descrição** é
+`Localized`; o **nome** é uma `string` simples, porque é nome próprio — as
+formações do instituto se chamam "Formação em Vibe Coding" em qualquer idioma,
+e traduzir um nome próprio inventaria um produto que não existe. `lib/cta.ts` resolve a formação e monta a URL com
 `?utm_source=yurioliveira.dev&utm_medium=post&utm_campaign=<slug>` — os
 parâmetros são montados por uma função única, nunca escritos à mão num post.
 
@@ -371,10 +373,14 @@ site não vira anúncio por descuido.
 chegam ao mesmo conteúdo, e que a chave do pilar não é traduzida no caminho.
 
 **Componentes de arquivo e de post** são testados com fixtures, como os atuais.
-Inclui os dois casos de borda visual: cartão de trilha sem histórico suficiente
-não renderiza o mini-gráfico, e a barra de números exibe data absoluta.
+Inclui os casos de borda visual do eixo do tempo: um único texto não divide por
+zero, a posição de cada marca é proporcional ao tempo decorrido e não ao índice
+do array, a altura codifica o tempo de leitura, e a barra de números exibe data
+absoluta.
 
-**`PostToc`**, único componente com estado, ganha teste de comportamento.
+**`PostToc`**, o único componente cliente que este trabalho acrescenta, ganha
+teste de comportamento. (`LocaleSwitch`, `ThemeToggle` e `Reveal` já eram
+componentes cliente antes deste projeto.)
 
 **E2E** ganha um caminho novo: abrir a home, entrar num post, confirmar que
 fórmula, figura e índice renderizaram, e trocar de idioma permanecendo no mesmo
@@ -383,7 +389,7 @@ texto.
 ## Fases
 
 **Fase 0 — três textos escritos antes de virar a home.** É a resposta ao risco
-que a home carrega: trilhas com `00` e `01` e um arquivo de um mês só entregam
+que a home carrega: uma legenda com `00` e `01` e um arquivo de um mês só entregam
 um site nascendo. Com três textos distribuídos entre os pilares, a estrutura se
 sustenta. Não é código; é ordem de trabalho, e é a primeira tarefa do plano.
 
