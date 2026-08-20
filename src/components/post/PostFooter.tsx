@@ -16,7 +16,7 @@ export function PostFooter({
   const cta = ctaDoPost(post)
 
   return (
-    <footer className="mt-12 border-t border-ink pt-4">
+    <footer className="mt-12 border-t border-tinta pt-4">
       <p className="font-dado text-[0.7rem] uppercase tracking-widest text-suave">
         {t(ui.post.daquiVocePodeIr, locale)}
       </p>
