@@ -1,14 +1,22 @@
+import Link from 'next/link'
 import { LocaleSwitch } from '@/components/ui/LocaleSwitch'
 import { SkipLink } from '@/components/ui/SkipLink'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
-import type { Locale } from '@/lib/i18n'
+import { ui } from '@/content/ui'
+import { type Locale, t } from '@/lib/i18n'
 
 export function TopBar({ locale }: { locale: Locale }) {
   return (
-    <header className="flex items-center justify-end gap-2 py-6">
+    <header className="flex items-center justify-between gap-2 py-6">
       <SkipLink locale={locale} />
-      <LocaleSwitch locale={locale} />
-      <ThemeToggle locale={locale} />
+      <nav className="flex gap-4 font-mono text-xs text-muted">
+        <Link href={`/${locale}`}>{t(ui.nav.newsletter, locale)}</Link>
+        <Link href={`/${locale}/portfolio`}>{t(ui.nav.portfolio, locale)}</Link>
+      </nav>
+      <div className="flex items-center gap-2">
+        <LocaleSwitch locale={locale} />
+        <ThemeToggle locale={locale} />
+      </div>
     </header>
   )
 }

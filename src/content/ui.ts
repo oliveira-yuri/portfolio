@@ -63,4 +63,7 @@ export const ui = {
     newsletter: { pt: 'Newsletter', en: 'Newsletter' },
     portfolio: { pt: 'Portfólio', en: 'Portfolio' },
   },
+  footer: {
+    vinculo: { pt: 'Assistente de ensino no', en: 'Teaching assistant at' },
+  },
 } satisfies LocalizedTree

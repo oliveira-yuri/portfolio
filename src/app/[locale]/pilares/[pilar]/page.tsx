@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { ArchiveList } from '@/components/archive/ArchiveList'
+import { SiteFooter } from '@/components/ui/SiteFooter'
 import { TopBar } from '@/components/ui/TopBar'
 import { descricaoPilar } from '@/content/pilares'
 import { isLocale, locales, t } from '@/lib/i18n'
@@ -26,6 +27,7 @@ export default async function PilarPage({ params }: { params: Promise<{ locale: 
         <p className="mt-2 max-w-2xl text-muted">{t(descricao, locale)}</p>
         <ArchiveList locale={locale} posts={posts} />
       </main>
+      <SiteFooter locale={locale} />
     </div>
   )
 }

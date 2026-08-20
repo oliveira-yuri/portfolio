@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import PortfolioPage from './page'
+import NewsletterPage from '@/app/[locale]/page'
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/pt',
@@ -9,18 +9,33 @@ vi.mock('next/navigation', () => ({
   },
 }))
 
-describe('página do portfólio', () => {
-  it('monta todas as seções na ordem definida', async () => {
-    render(await PortfolioPage({ params: Promise.resolve({ locale: 'pt' }) }))
+describe('Newsletter (home)', () => {
+  it('mostra o nome do autor e o bloco de identidade', async () => {
+    render(await NewsletterPage({ params: Promise.resolve({ locale: 'pt' }) }))
 
-    const regioes = screen.getAllByRole('region').map((r) => r.getAttribute('id'))
-    expect(regioes).toEqual(['sobre', 'experiencia', 'habilidades', 'certificados', 'formacao', 'contato'])
+    expect(screen.getByRole('heading', { level: 1, name: 'Yuri Oliveira' })).toBeInTheDocument()
   })
 
-  it('tem exatamente um h1 e um main', async () => {
-    render(await PortfolioPage({ params: Promise.resolve({ locale: 'en' }) }))
+  it('linka para o portfólio a partir do topo e do bloco de identidade', async () => {
+    render(await NewsletterPage({ params: Promise.resolve({ locale: 'pt' }) }))
 
-    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
-    expect(screen.getByRole('main')).toHaveAttribute('id', 'main')
+    const links = screen.getAllByRole('link', { name: 'Portfólio' })
+    expect(links.length).toBeGreaterThan(1)
+    for (const link of links) {
+      expect(link).toHaveAttribute('href', '/pt/portfolio')
+    }
+  })
+
+  it('não tem seção "sobre mim" fora do bloco de identidade', async () => {
+    render(await NewsletterPage({ params: Promise.resolve({ locale: 'pt' }) }))
+
+    expect(screen.queryByRole('heading', { level: 2, name: 'Sobre' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { level: 2, name: 'Experiência' })).not.toBeInTheDocument()
+  })
+
+  it('mostra as três trilhas', async () => {
+    render(await NewsletterPage({ params: Promise.resolve({ locale: 'pt' }) }))
+
+    expect(screen.getByRole('heading', { level: 2, name: 'Trilhas' })).toBeInTheDocument()
   })
 })
