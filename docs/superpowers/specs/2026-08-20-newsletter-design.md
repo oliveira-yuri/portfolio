@@ -231,64 +231,97 @@ serve a Newsletter e o portfólio vive em `/pt/portfolio`. Nenhuma URL deixa de
 responder; o conteúdo de `/pt` muda. `sitemap.ts` passa a listar posts, tags e
 pilares dos dois idiomas.
 
-## Design visual
+## Design visual — direção "Intervalo"
 
-A identidade **não muda** — o projeto já tem exatamente a combinação escolhida
-("editorial sóbrio com assinatura quant"), e ela é reaproveitada inteira:
-papel quente `#faf9f6` sobre tinta `#1a1a18`, verde-mata `#3d5a45` como
-destaque, e a tríade Instrument Serif (títulos), Inter (corpo), JetBrains Mono
-(dados e metadados). Tema claro e escuro continuam funcionando como hoje.
+**Esta seção substitui a identidade anterior.** A primeira versão do site usava
+papel quente `#faf9f6`, uma serifada de alto contraste e fios de jornal — uma
+combinação que, revisada com critério de design, se revelou o resultado
+genérico que ferramentas de IA produzem por padrão, independente do assunto.
+Foi trocada por uma direção derivada do assunto real: estatística.
 
-O que é novo é como essa identidade se aplica ao conteúdo.
+A tese é **uma publicação que mostra a própria incerteza**.
 
-### Newsletter (home)
+### Cor: uma escala divergente, não uma cor de destaque
 
-Na ordem vertical:
+A paleta é uma escala divergente — frio, neutro, quente — que é o vocabulário
+de quem lê gráfico de calibração. E ela **codifica algo verdadeiro**: os três
+pilares ocupam os três pontos da escala, na ordem do abstrato ao aplicado.
 
-1. **Identidade** — nome em serifada, três a quatro linhas dizendo quem escreve
-   e sobre o quê, e links para currículo, GitHub, LinkedIn e Portfólio. É o
-   único lugar do site com informação pessoal fora do `/portfolio`.
-2. **Barra de números** em monoespaçada: quantidade de textos, mês de início e
-   data do último texto.
-3. **Trilhas** — três cartões, um por pilar, com contagem em monoespaçada,
-   descrição de uma linha e um mini-gráfico de cadência de publicação.
-4. **Destaques** — os posts com `destaque: true`, com resumo.
-5. **Arquivo cronológico** agrupado por ano e mês, com a data em monoespaçada e
-   uma barra fina de cor marcando o pilar de cada post.
+| Token | Claro | Escuro | Papel |
+|---|---|---|---|
+| `papel` | `#f1f2f0` | `#14171a` | fundo, neutro frio — deliberadamente não creme |
+| `tinta` | `#15171a` | `#e8eae8` | texto |
+| `suave` | `#5c6269` | `#949b9f` | texto secundário; **também o polo neutro** |
+| `fio` | `#d4d7d5` | `#262b2e` | régua, borda |
+| `frio` | `#2b6a86` | `#6fb3ce` | polo frio; **pilar `academico`** |
+| `quente` | `#9c4a6e` | `#d98aa8` | polo quente; **pilar `projetos`** |
 
-Duas regras contra o problema de site recém-nascido:
+O pilar `ensino` ocupa o meio da escala e usa `suave`. O mapeamento
+pilar → polo vive num módulo único; nenhum componente escolhe cor de pilar por
+conta própria.
 
-- **A barra de números mostra a data absoluta do último texto**, nunca "há 2
-  dias". O site é estático: um tempo relativo congelaria no momento do build e
-  passaria a mentir no dia seguinte.
-- **O mini-gráfico de cadência só aparece com quatro ou mais meses de
-  histórico.** Antes disso, o cartão mostra contagem e descrição — um traço
-  solitário não é um gráfico.
+### Tipografia: duas famílias, três papéis, nenhuma sem serifa
 
-Contagens são sempre reais, desde o primeiro dia. `01` honesto é coerente com
-um caderno de laboratório; número inflado não é.
+- **Newsreader** (variável, eixo óptico 6–72) carrega display E texto corrido.
+  A mesma família se comporta de forma diferente em 34px e em 17px porque o
+  eixo óptico é real, não uma simulação por peso.
+- **IBM Plex Mono** carrega todo dado, rótulo, metadado e número.
+
+O site não usa nenhuma fonte sem serifa. É uma restrição deliberada: dado é
+monoespaçado, prosa é serifada, e não há terceira categoria.
+
+Os tokens de fonte são nomeados por papel — `--font-display`, `--font-texto`,
+`--font-dado` — e não por classificação tipográfica, porque `font-sans`
+apontando para uma serifada seria um nome que mente.
+
+### Assinatura: o eixo do tempo
+
+O elemento pelo qual a home é lembrada é o **arquivo plotado como eixo do
+tempo**: um traço por texto, posicionado pela data, colorido pelo pilar. A
+densidade que o leitor enxerga *é* a cadência de publicação. Não é enfeite —
+é o mesmo dado da listagem abaixo, em outra projeção.
+
+Cada linha do arquivo carrega uma **barra de intervalo** cujo comprimento é o
+tempo de leitura. Número tratado como grandeza, não como texto.
+
+### Ritmo estrutural
+
+O arquivo **não** usa fio entre linhas. Separar cada item com uma régua de um
+pixel produz a densidade de jornal que é, ela mesma, um clichê de design
+gerado. O ritmo vem do espaço, do rótulo de pilar acima do título e da barra
+de intervalo à direita. Fio existe só sob o eixo do tempo e sob títulos de
+seção.
+
+### Ordem da home
+
+1. **Identidade** — nome em display, três a quatro linhas, links para
+   currículo, GitHub, LinkedIn e Portfólio.
+2. **Eixo do tempo** com legenda em monoespaçada: total de textos à esquerda,
+   período à direita.
+3. **Legenda da escala** — os três pilares como pontos da escala divergente,
+   cada um linkando para sua página. Substitui os cartões de trilha da versão
+   anterior: com o eixo do tempo acima, três cartões repetiam a mesma
+   informação ocupando o dobro do espaço.
+4. **Destaques**, com resumo.
+5. **Arquivo cronológico** agrupado por mês.
+
+Regras contra o problema de site recém-nascido continuam valendo: a legenda
+mostra contagens reais desde o primeiro dia, e a barra de números exibe data
+absoluta, nunca tempo relativo — o site é estático e um tempo relativo
+congelaria no build.
 
 ### Página de post
 
-Duas colunas no desktop: índice de seções fixo à esquerda, texto à direita.
+Duas colunas no desktop, índice de seções à esquerda, texto à direita, com o
+título antes do índice na ordem do DOM. O corpo mantém medida controlada,
+fórmula em KaTeX, tabela com cabeçalho monoespaçado e números alinhados por
+dígito, figura com legenda numerada, código com realce feito no build.
 
-O índice lista as seções, marca a atual, e mostra progresso e tempo restante.
-No celular ele colapsa em um resumo recolhível no topo, e em post sem seções
-não é renderizado.
+### Movimento
 
-O texto tem medida controlada, capitular em serifada no primeiro parágrafo, e
-o material de apoio vive no fluxo: fórmula em bloco com KaTeX, tabela com
-cabeçalho em monoespaçada e números alinhados por dígito, figura com legenda
-numerada (`Fig. 1 — …`), código com realce feito no build, e notas ao final.
+Praticamente nenhum. O `Reveal` já existente continua; nada novo é
+acrescentado. A assinatura é o eixo, e uma assinatura basta.
 
-O cabeçalho traz pilar, data, tempo de leitura, idioma disponível e tags.
-
-### Rodapé do artigo
-
-Regra fixa: **nada interrompe o corpo do texto.** Quando o post termina, o
-rodapé traz duas colunas — "no site", com dois textos relacionados por pilar e
-tag; e, se o post declarou `cta`, a formação correspondente do ibe.IA, seguida
-da divulgação explícita do vínculo.
 
 ## Ligação com o ibe.IA
 
