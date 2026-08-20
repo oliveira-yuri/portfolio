@@ -73,6 +73,20 @@ describe('página de post', () => {
     expect(screen.queryByRole('navigation', { name: 'Neste texto' })).not.toBeInTheDocument()
   })
 
+  it('mantém o título do post antes do índice de seções na ordem do DOM, mesmo com o índice reposicionado visualmente à esquerda (WCAG 1.3.2)', async () => {
+    render(await PostPage({ params: Promise.resolve({ locale: 'pt', slug: 'com-cta' }) }))
+
+    const titulo = screen.getByRole('heading', { level: 1, name: 'Post com CTA' })
+    const indice = screen.getByRole('navigation', { name: 'Neste texto' })
+
+    // DOCUMENT_POSITION_FOLLOWING (4): `indice` vem DEPOIS de `titulo` no DOM.
+    // `md:order-first` na classe do wrapper do índice muda só a posição
+    // visual em telas largas — a ordem de leitura/DOM tem que continuar
+    // título -> corpo -> índice, senão leitor de tela lê a lista de seções
+    // antes de saber do que o post trata.
+    expect(titulo.compareDocumentPosition(indice) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
   it('não retorna 404 para um post que só existe em português; mostra aviso em inglês e link para o pt', async () => {
     render(await PostPage({ params: Promise.resolve({ locale: 'en', slug: 'sem-cta' }) }))
 

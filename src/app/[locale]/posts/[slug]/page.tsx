@@ -33,12 +33,17 @@ export default async function PostPage({ params }: { params: Promise<{ locale: s
       <main id="main" className="pb-16">
         {post ? (
           <article className="grid gap-8 md:grid-cols-[9.5rem_1fr]">
-            <div className="md:sticky md:top-6 md:self-start">
-              <PostToc locale={locale} secoes={extrairSecoes(post.corpo)} />
-            </div>
+            {/* Ordem no DOM é título -> corpo -> índice (WCAG 1.3.2, Meaningful
+                Sequence): um leitor de tela nunca encontra a lista de seções
+                antes de saber do que o post trata. `md:order-first` só muda a
+                ordem VISUAL a partir de md, reposicionando o índice na coluna
+                esquerda sem tocar a ordem de leitura/DOM. */}
             <div>
               <PostHeader locale={locale} post={post} />
               <div className="corpo-post mt-8 max-w-[34em]">{await renderizarMdx(post.corpo)}</div>
+            </div>
+            <div className="md:order-first md:sticky md:top-6 md:self-start">
+              <PostToc locale={locale} secoes={extrairSecoes(post.corpo)} />
             </div>
           </article>
         ) : (
