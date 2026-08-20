@@ -105,6 +105,12 @@ describe('lerPosts', () => {
     expect(() => lerPosts(dir)).toThrow(/titulo/i)
   })
 
+  it('rejeita resumo com caractere de controle (inválido em XML, mesmo escapado)', () => {
+    const dir = comArquivo('2026-01-01-texto.pt.mdx', FRONTMATTER_OK.replace('Resumo curto.', 'Resumo com \x01 controle.'))
+
+    expect(() => lerPosts(dir)).toThrow(/resumo/i)
+  })
+
   it('rejeita cta que não é uma formação conhecida', () => {
     const dir = comArquivo('2026-01-01-texto.pt.mdx', `${FRONTMATTER_OK.replace('tags: [ia]', 'tags: [ia]\ncta: curso-inexistente')}`)
 

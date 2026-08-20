@@ -30,6 +30,13 @@ describe('montarFeed', () => {
     expect(xml).not.toContain('<ciência>')
   })
 
+  it('remove caractere de controle do resumo em vez de emitir referência numérica ilegal em XML', () => {
+    const xml = montarFeed([{ ...postFixture[0], resumo: 'Resumo com \x01 controle.' }], 'pt')
+
+    expect(xml).not.toContain('&#1;')
+    expect(xml).toContain('Resumo com  controle.')
+  })
+
   it('gera feed válido mesmo sem posts', () => {
     const xml = montarFeed([], 'pt')
 

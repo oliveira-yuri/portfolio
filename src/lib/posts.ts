@@ -30,6 +30,8 @@ const NOME = /^(\d{4}-\d{2}-\d{2})-([a-z0-9-]+)\.([a-z]{2})\.mdx$/
 const TAG = /^[a-z0-9-]+$/
 const DIRETORIO_PADRAO = 'src/content/posts'
 const LIMITE_RESUMO = 200
+/** Controle fora de tab/LF/CR: ilegal em XML 1.0 mesmo como entidade numérica (ver src/lib/feed.ts). */
+const CARACTERE_DE_CONTROLE = /[\x00-\x08\x0B\x0C\x0E-\x1F]/
 
 function erro(arquivo: string, motivo: string): never {
   throw new Error(`Post inválido em "${arquivo}": ${motivo}`)
@@ -37,6 +39,9 @@ function erro(arquivo: string, motivo: string): never {
 
 function texto(valor: unknown, campo: string, arquivo: string): string {
   if (typeof valor !== 'string' || valor.trim() === '') erro(arquivo, `${campo} é obrigatório e não pode ser vazio`)
+  if (CARACTERE_DE_CONTROLE.test(valor)) {
+    erro(arquivo, `${campo} contém caractere de controle inválido (não permitido em XML)`)
+  }
   return valor.trim()
 }
 

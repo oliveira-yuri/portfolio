@@ -3,13 +3,23 @@ import { type Locale, htmlLang, t } from '@/lib/i18n'
 import type { Post } from '@/lib/posts'
 import { absoluteUrl } from '@/lib/site'
 
-/** Escapa o que quebra XML e converte não-ASCII em entidade numérica. */
+/**
+ * Escapa o que quebra XML e converte não-ASCII em entidade numérica.
+ *
+ * `src/lib/posts.ts` já rejeita caractere de controle no frontmatter, mas
+ * esta função não confia nisso: removê-los aqui de novo, antes de virarem
+ * entidade numérica, garante que o feed nunca saia inválido mesmo que uma
+ * validação futura deixe passar algo. Tab/LF/CR (\x09, \x0A, \x0D) são
+ * preservados — são os únicos caracteres de controle legais em XML 1.0,
+ * inclusive como referência numérica.
+ */
 function escapar(texto: string): string {
   return texto
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
     .replace(/[^\x20-\x7E]/g, (caractere) => `&#${caractere.codePointAt(0)};`)
 }
 
