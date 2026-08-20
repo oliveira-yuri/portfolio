@@ -8,7 +8,9 @@ test('a raiz redireciona para a versão em português', async ({ page }) => {
 })
 
 test('a página em português tem todas as seções', async ({ page }) => {
-  await page.goto('/pt')
+  // /pt agora serve a newsletter; o portfólio (dono destas seções) mudou
+  // para /pt/portfolio.
+  await page.goto('/pt/portfolio')
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR')
   await expect(page.locator('h1')).toHaveCount(1)
@@ -18,7 +20,9 @@ test('a página em português tem todas as seções', async ({ page }) => {
 })
 
 test('trocar de idioma muda o conteúdo e o currículo servido', async ({ page }) => {
-  await page.goto('/pt')
+  // /pt agora serve a newsletter; o Hero e o Contato com o CV duplicado
+  // (ver comentário abaixo) vivem em /pt/portfolio.
+  await page.goto('/pt/portfolio')
   // O link de CV aparece tanto no Hero quanto no Contato (por design) — .first()
   // evita a violação de "strict mode" do Playwright, do mesmo jeito que a
   // asserção equivalente em inglês, logo abaixo, já fazia.
@@ -29,7 +33,7 @@ test('trocar de idioma muda o conteúdo e o currículo servido', async ({ page }
 
   await page.getByRole('link', { name: 'Ver em inglês (EN)' }).click()
 
-  await expect(page).toHaveURL(/\/en$/)
+  await expect(page).toHaveURL(/\/en\/portfolio$/)
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
   await expect(page.getByRole('link', { name: 'Download résumé' }).first()).toHaveAttribute(
     'href',
@@ -38,7 +42,8 @@ test('trocar de idioma muda o conteúdo e o currículo servido', async ({ page }
 })
 
 test('a âncora de certificados leva direto à seção', async ({ page }) => {
-  await page.goto('/pt#certificados')
+  // Seção de certificados agora fica em /pt/portfolio, não mais em /pt.
+  await page.goto('/pt/portfolio#certificados')
 
   const secao = page.locator('#certificados')
   await expect(secao).toBeInViewport()
@@ -96,7 +101,9 @@ test('o conteúdo das seções continua visível com JavaScript desativado', asy
   const page = await context.newPage()
 
   try {
-    await page.goto('/pt')
+    // As seções verificadas aqui (e a Reveal que as envolve) vivem em
+    // /pt/portfolio, não mais na newsletter que hoje ocupa /pt.
+    await page.goto('/pt/portfolio')
 
     for (const secao of SECOES) {
       const elemento = page.locator(`#${secao}`)
@@ -108,4 +115,43 @@ test('o conteúdo das seções continua visível com JavaScript desativado', asy
   } finally {
     await context.close()
   }
+})
+
+test('da newsletter até o post, com fórmula e índice', async ({ page }) => {
+  await page.goto('/pt')
+
+  await expect(page.getByRole('heading', { level: 1, name: 'Yuri Oliveira' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 2, name: 'Trilhas' })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Post de verificação' }).first().click()
+
+  await expect(page.getByRole('heading', { level: 1, name: 'Post de verificação' })).toBeVisible()
+  await expect(page.locator('.katex').first()).toBeVisible()
+  await expect(page.getByRole('navigation', { name: 'Neste texto' })).toBeVisible()
+  await expect(page.getByText(/Divulgação/)).toBeVisible()
+})
+
+test('trocar de idioma mantém o leitor no mesmo texto', async ({ page }) => {
+  await page.goto('/pt/posts/post-de-verificacao')
+
+  // O LocaleSwitch usa <a> comum (navegação de documento inteiro, não
+  // client-side) de propósito — ver comentário em LocaleSwitch.tsx. As
+  // asserções abaixo usam expect() com poll automático (toHaveURL,
+  // toBeVisible), então esperam a navegação real terminar em vez de supor
+  // uma transição instantânea de SPA.
+  await page.getByRole('link', { name: /ingl[eê]s/i }).click()
+
+  await expect(page).toHaveURL(/\/en\/posts\/post-de-verificacao/)
+  // O aviso é deliberadamente escrito no idioma da PÁGINA atual (en), não no
+  // idioma do texto alternativo — só o rótulo do link ("Ler em português")
+  // fica no idioma de destino, de propósito (ver comentário em
+  // src/app/[locale]/posts/[slug]/page.tsx e ui.post.soEmPortugues em
+  // src/content/ui.ts). Em /en o leitor vê a frase em inglês.
+  await expect(page.getByText('This text is only available in Portuguese.')).toBeVisible()
+})
+
+test('o portfólio continua acessível na rota nova', async ({ page }) => {
+  await page.goto('/pt/portfolio')
+
+  await expect(page.getByRole('heading', { level: 2, name: 'Experiência' })).toBeVisible()
 })
