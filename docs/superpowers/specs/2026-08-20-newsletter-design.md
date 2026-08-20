@@ -35,7 +35,7 @@ ibe.IA. Secundário significa que ele **nunca** se sobrepõe à leitura; a seç�
 |---|---|---|
 | Modelo de publicação | Site próprio; e-mail é fase posterior | O autor é dono do conteúdo, do domínio e do design. RSS já é canal de distribuição real no v1. |
 | Stack | Evoluir o Next.js existente | i18n, tema, tokens de design, testes e CI já funcionam. Migrar para outro gerador descartaria tudo isso em troca de ganho imperceptível num site de texto. |
-| Formato dos textos | MDX em `src/content/posts/` | Permite fórmula, figura numerada e gráfico — a assinatura visual escolhida. Markdown puro não permitiria. |
+| Formato dos textos | MDX em `src/content/posts/` | Permite fórmula, tabela, figura numerada e gráfico — a assinatura visual escolhida. Markdown puro não permitiria. |
 | Fluxo de publicação | Arquivo novo, commit, push | Sem CMS, sem banco, sem painel. Versionado, e o deploy é automático. |
 | Idiomas | PT e EN, com post podendo existir em um só | Alcance internacional sem obrigar tradução de tudo. |
 | Taxonomia | Pilar fechado (1 por post) + tags livres (1–4) | Pilar é tipado e governa navegação e visual; tag livre nunca governa layout. |
@@ -190,8 +190,11 @@ teste de estado fica limitada a um componente.
 
 ### Dependências novas
 
-`gray-matter`, `next-mdx-remote`, `remark-math`, `rehype-katex`, `katex`,
-`rehype-slug`, `rehype-pretty-code`.
+`gray-matter`, `next-mdx-remote`, `remark-math`, `remark-gfm`, `rehype-katex`,
+`katex`, `rehype-slug`, `rehype-pretty-code` — oito.
+
+(`remark-gfm` foi acrescentada durante o planejamento: sem ela o MDX não
+entende tabela escrita em Markdown, e tabela é requisito da página de post.)
 
 Todas rodam em tempo de build. A única que alcança o navegador é o CSS do
 KaTeX (~23 KB comprimidos, com fontes sob demanda), e só nas páginas que
