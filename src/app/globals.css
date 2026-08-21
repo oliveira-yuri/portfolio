@@ -5,21 +5,42 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --papel: #f1f2f0;
-  --tinta: #15171a;
-  --suave: #5c6269;
-  --fio: #d4d7d5;
-  --frio: #2b6a86;
-  --quente: #9c4a6e;
+  --papel: #fdfefd;
+  --tinta: #0e1210;
+  --suave: #57605a;
+  --fio: #dde5df;
+
+  /* Verde estrutural: identidade "Clorofila". Único valor de texto acessível
+     (>=4.5:1 contra --papel, medido — ver src/lib/escala.ts) usado tanto como
+     destaque geral do site (links, foco, marcadores) quanto como cor do
+     rótulo de pilar. Substitui o antigo --frio, que fazia o mesmo papel de
+     destaque geral e, além disso, era o polo "frio" da escala divergente
+     extinta — os dois usos agora convergem neste único token. */
+  --verde: #165a38;
+
+  /* Escala sequencial de pilar (abstrato -> aplicado), só para marcas NÃO
+     textuais (selo da legenda, barra de tempo de leitura) — limiar WCAG
+     1.4.11 de 3:1, não o de 4.5:1 exigido para texto. Três passos medidos no
+     mesmo matiz (~150°), do mais próximo de --papel (academico, o polo
+     abstrato) ao mais distante (projetos, o polo aplicado). Ver
+     src/lib/escala.ts para a medição completa e por que o rótulo em si não
+     usa estas três cores. */
+  --pilar-academico: #238b57;
+  --pilar-ensino: #18623d;
+  --pilar-projetos: #0e3924;
 }
 
 .dark {
-  --papel: #14171a;
-  --tinta: #e8eae8;
-  --suave: #949b9f;
-  --fio: #262b2e;
-  --frio: #6fb3ce;
-  --quente: #d98aa8;
+  --papel: #0b1310;
+  --tinta: #e8f0ea;
+  --suave: #8c9d92;
+  --fio: #1e2a24;
+
+  --verde: #31c47a;
+
+  --pilar-academico: #218352;
+  --pilar-ensino: #2bab6b;
+  --pilar-projetos: #43d08a;
 }
 
 @theme inline {
@@ -27,20 +48,23 @@
   --color-tinta: var(--tinta);
   --color-suave: var(--suave);
   --color-fio: var(--fio);
-  --color-frio: var(--frio);
-  --color-quente: var(--quente);
+  --color-verde: var(--verde);
+  --color-pilar-academico: var(--pilar-academico);
+  --color-pilar-ensino: var(--pilar-ensino);
+  --color-pilar-projetos: var(--pilar-projetos);
 
   /* Nomeados por papel, não por classificação tipográfica: `font-sans`
-     apontando para uma serifada seria um nome que mente. */
-  --font-display: var(--font-newsreader);
-  --font-texto: var(--font-newsreader);
-  --font-dado: var(--font-plex-mono);
+     apontando para a fonte errada seria um nome que mente — mesmo hoje que
+     as duas famílias de prosa são grotescas, não serifadas. */
+  --font-display: var(--font-familjen-grotesk);
+  --font-texto: var(--font-familjen-grotesk);
+  --font-dado: var(--font-dm-mono);
 }
 
 body {
   background-color: var(--papel);
   color: var(--tinta);
-  font-family: var(--font-texto), Georgia, 'Times New Roman', serif;
+  font-family: var(--font-texto), Arial, Helvetica, sans-serif;
   font-size: 1.0625rem;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
@@ -49,7 +73,7 @@ body {
 /* `@layer base`, não uma regra solta: Tailwind emite suas classes utilitárias
    dentro de `@layer utilities`, e por cascade layers uma regra sem camada
    sempre vence qualquer regra em camada, não importa a especificidade — um
-   `<a className="text-frio">` perderia silenciosamente para este reset se ele
+   `<a className="text-verde">` perderia silenciosamente para este reset se ele
    ficasse fora de uma camada. Em `@layer base` (mais baixa que `utilities`),
    o reset continua valendo por padrão, mas qualquer `text-*`/`hover:text-*`
    aplicado a um link volta a vencer, como o nome da classe promete. */
@@ -60,7 +84,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--frio);
+  outline: 2px solid var(--verde);
   outline-offset: 3px;
 }
 
@@ -86,22 +110,22 @@ body {
 }
 
 .corpo-post h2 {
-  font-family: var(--font-display), Georgia, serif;
+  font-family: var(--font-display), Arial, Helvetica, sans-serif;
   font-size: 1.6rem;
   margin: 2rem 0 0.5rem;
   scroll-margin-top: 2rem;
 }
 
 .corpo-post h3 {
-  font-family: var(--font-display), Georgia, serif;
+  font-family: var(--font-display), Arial, Helvetica, sans-serif;
   font-size: 1.25rem;
   margin: 1.5rem 0 0.4rem;
   scroll-margin-top: 2rem;
 }
 
 .corpo-post a {
-  color: var(--frio);
-  border-bottom: 1px solid color-mix(in srgb, var(--frio) 40%, transparent);
+  color: var(--verde);
+  border-bottom: 1px solid color-mix(in srgb, var(--verde) 40%, transparent);
 }
 
 .corpo-post ul,
@@ -111,7 +135,7 @@ body {
 }
 
 .corpo-post blockquote {
-  border-left: 2px solid var(--frio);
+  border-left: 2px solid var(--verde);
   padding-left: 0.9rem;
   color: var(--suave);
   margin: 1rem 0;

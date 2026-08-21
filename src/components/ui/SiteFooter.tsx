@@ -8,7 +8,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
       <span>{profile.name}</span>
       <span>
         {t(ui.footer.vinculo, locale)}{' '}
-        <a href="https://ibe.ia.br/" className="text-frio">
+        <a href="https://ibe.ia.br/" className="text-verde">
           ibe.IA
         </a>
       </span>

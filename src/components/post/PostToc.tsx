@@ -49,7 +49,7 @@ export function PostToc({
             <a
               href={`#${secao.id}`}
               aria-current={secao.id === atual ? 'true' : undefined}
-              className={secao.id === atual ? 'text-frio' : 'text-suave'}
+              className={secao.id === atual ? 'text-verde' : 'text-suave'}
             >
               {secao.texto}
             </a>

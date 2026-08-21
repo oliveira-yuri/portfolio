@@ -1,3 +1,12 @@
+/**
+ * DELIBERADAMENTE SEM CONSUMIDOR no momento: a home (src/app/[locale]/page.tsx)
+ * removeu o uso deste componente na direção "Clorofila" (ver comentário lá).
+ * Com só três textos publicados, o eixo do tempo plota um traço solitário
+ * que anuncia "este site é novo" em vez de mostrar cadência — só passa a
+ * significar algo com dezenas de posts espalhados no tempo. NÃO apague este
+ * componente nem os testes abaixo: a intenção é religá-lo à home mais
+ * adiante, quando houver histórico suficiente para o gráfico valer a pena.
+ */
 import { ui } from '@/content/ui'
 import { formatarMesAno } from '@/lib/date'
 import { corDoPilar } from '@/lib/escala'

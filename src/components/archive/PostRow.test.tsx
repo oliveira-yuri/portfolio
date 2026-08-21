@@ -39,10 +39,10 @@ describe('PostRow', () => {
     expect(screen.getByRole('link', { name: 'Projetos' })).toHaveAttribute('href', '/pt/pilares/projetos')
   })
 
-  it('colore o rótulo do pilar pelo polo da escala', () => {
+  it('colore o rótulo do pilar com o verde de texto único da escala (não varia por pilar — ver src/lib/escala.ts)', () => {
     render(<PostRow locale="pt" post={postFixture[0]} />)
 
-    expect(screen.getByRole('link', { name: 'Projetos' })).toHaveClass('text-quente')
+    expect(screen.getByRole('link', { name: 'Projetos' })).toHaveClass('text-verde')
   })
 
   it('mostra o tempo de leitura como número e como barra proporcional', () => {

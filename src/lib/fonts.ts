@@ -4,37 +4,42 @@
  * — seção `axes`: "Some variable fonts have extra axes that can be included.
  * By default, only the font weight is included to keep the file size down."
  * Conferido também node_modules/next/dist/compiled/@next/font/dist/google/font-data.json,
- * que lista os eixos reais de `Newsreader`: `opsz` (6–72, padrão 16) e `wght`
- * (200–800). Sem declarar `axes: ['opsz']`, o eixo óptico não entra no
- * arquivo de fonte baixado e fica preso no valor padrão — o que anularia o
- * motivo de escolher esta fonte (o mesmo arquivo se comportar diferente em
- * 34px e em 17px). O brief do Task 1 não incluía essa chave no bloco de
- * código do Step 2; adicionada aqui por exigência do próprio Step 1
- * ("confirmar como declarar `axes`... a documentação instalada ganha de
- * qualquer memória"). Divergência registrada no relatório da task.
+ * que lista os eixos reais das duas fontes da direção "Clorofila":
+ * - `Familjen Grotesk`: variável, único eixo `wght` (400–700) — sem eixo
+ *   extra além do peso, então `axes` não se aplica aqui (o próprio peso já
+ *   entra por padrão, como documentado acima). Sem `weight` explícito,
+ *   porque é variável (mesmo padrão do Newsreader anterior).
+ * - `DM Mono`: NÃO é variável (pesos fixos `300`/`400`/`500`, sem entrada
+ *   `variable` na lista de pesos, e sem bloco `axes` no JSON) — `weight`
+ *   precisa ser declarado explicitamente; `axes` simplesmente não existe
+ *   para esta fonte.
+ * Diferença em relação ao arquivo anterior: a chamada de Newsreader passava
+ * `axes: ['opsz']` porque aquela família tinha um eixo óptico real além do
+ * peso. Nenhuma das duas fontes atuais tem eixo extra — copiar aquele
+ * `axes: ['opsz']` para cá adicionaria uma chave que a documentação instalada
+ * diz não fazer nada para estas famílias.
  */
-import { IBM_Plex_Mono, Newsreader } from 'next/font/google'
+import { DM_Mono, Familjen_Grotesk } from 'next/font/google'
 
-// Newsreader carrega display E texto: o eixo óptico faz a mesma família se
-// comportar de forma diferente em 34px e em 17px. Não há fonte sem serifa
-// neste projeto — dado é monoespaçado, prosa é serifada, não há terceira
-// categoria.
-const newsreader = Newsreader({
+// Familjen Grotesk carrega display E texto: não há fonte serifada neste
+// projeto — dado é monoespaçado, prosa é grotesca, não há terceira
+// categoria. Uma família só (variável) faz o mesmo arquivo se comportar bem
+// tanto em título grande quanto em corpo de texto, sem eixo óptico dedicado.
+const familjenGrotesk = Familjen_Grotesk({
   subsets: ['latin'],
-  axes: ['opsz'],
   style: ['normal', 'italic'],
-  variable: '--font-newsreader',
+  variable: '--font-familjen-grotesk',
   display: 'swap',
 })
 
-const plexMono = IBM_Plex_Mono({
+const dmMono = DM_Mono({
   subsets: ['latin'],
   weight: ['400', '500'],
-  variable: '--font-plex-mono',
+  variable: '--font-dm-mono',
   display: 'swap',
 })
 
-export const fontClassName = `${newsreader.variable} ${plexMono.variable}`
+export const fontClassName = `${familjenGrotesk.variable} ${dmMono.variable}`
 
 /** Aplica o tema antes da primeira pintura, para a página não piscar. */
 export const themeScript = `try{var t=localStorage.getItem('theme');var d=t?t==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.classList.toggle('dark',d)}catch(e){}`

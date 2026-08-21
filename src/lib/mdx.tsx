@@ -75,16 +75,23 @@ function rehypeSlugSemAcento() {
 
 /**
  * Nenhum tema claro embutido no shiki chega a 4.5:1 (WCAG AA) no token de
- * comentário contra o fundo derivado do bloco em modo claro — medido para
- * os 21 temas `type: "light"` do pacote (ver task-8-report.md); `github-light`,
- * o tema em produção, mede 4.04:1, e o candidato mais próximo do limiar
- * (`light-plus`) para em 4.31:1. Como não existe tema pronto que passe, a
- * saída não é trocar de tema — é pegar o registro do `github-light` já
- * embutido no shiki (sem vendorizar cópia) e sobrescrever só a cor das
- * regras de comentário para `#5c6269`: a cor do token `--suave` do site em
- * modo claro (ver `src/app/globals.css`), a mesma usada em toda a prosa
- * secundária. Raciocínio semântico antes de numérico — um comentário de
- * código É prosa secundária.
+ * comentário contra o fundo derivado do bloco em modo claro — medido
+ * originalmente para os 21 temas `type: "light"` do pacote (ver
+ * task-8-report.md); `github-light`, o tema em produção, media 4.04:1 contra
+ * o fundo antigo. Como não existe tema pronto que passe, a saída não é
+ * trocar de tema — é pegar o registro do `github-light` já embutido no shiki
+ * (sem vendorizar cópia) e sobrescrever só a cor das regras de comentário
+ * para a cor do token `--suave` do site em modo claro (ver
+ * `src/app/globals.css`), a mesma usada em toda a prosa secundária.
+ * Raciocínio semântico antes de numérico — um comentário de código É prosa
+ * secundária.
+ *
+ * RE-MEDIDO na direção "Clorofila" (paleta inteira trocada, ver
+ * .superpowers/sdd/2026-08-20-redesenho-intervalo/clorofila-report.md): novo
+ * `--suave` claro é `#57605a`; novo fundo do bloco é
+ * `color-mix(in srgb, var(--tinta) 3%, var(--papel))` com os tokens novos
+ * (`--tinta: #0e1210`, `--papel: #fdfefd`), que resolve para `#f6f7f6`.
+ * `#57605a` contra `#f6f7f6` mede 6.06:1 — folga confortável acima de 4.5:1.
  *
  * O hex é fixo de propósito, não lido de `--suave`: shiki não lê custom
  * property CSS, só recebe uma string de cor no registro do tema e a emite
@@ -101,7 +108,7 @@ function rehypeSlugSemAcento() {
  * `comment.block.documentation` etc.) — não há uma segunda regra escondida
  * para corrigir.
  */
-const COR_COMENTARIO_CLARO = '#5c6269'
+const COR_COMENTARIO_CLARO = '#57605a'
 
 let temaClaroDoBlocoDeCodigoPromise: Promise<ThemeRegistrationRaw> | undefined
 
@@ -192,7 +199,15 @@ export async function renderizarMdx(corpo: string): Promise<ReactElement> {
           // `github-dark` — mesma família de design do GitHub, sucessor
           // direto do tema antigo, sem cores neon — e sobra margem
           // confortável: comentário `#8B949E` dá 5.50:1, texto comum
-          // `#79C0FF` dá 8.70:1.
+          // `#79C0FF` dá 8.70:1 (medido contra o fundo antigo).
+          //
+          // RE-VERIFICADO na direção "Clorofila" (ver COR_COMENTARIO_CLARO
+          // acima e o relatório da tarefa): o fundo do bloco escuro mudou
+          // para `#121a17` (3% do novo --tinta escuro + 97% do novo --papel
+          // escuro). `github-dark-default` continua passando sem trocar de
+          // tema: comentário `#8B949E` mede 5.76:1, texto comum `#79C0FF`
+          // mede 9.10:1 — os dois ainda acima de 4.5:1, então esta escolha de
+          // tema não precisou mudar, só a nota fica registrada aqui.
           [rehypePrettyCode, { theme: { light: temaClaroDoBlocoDeCodigo, dark: 'github-dark-default' } }],
         ],
       },

@@ -22,9 +22,9 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ loc
       // Satori (o renderizador desta rota) não lê custom property CSS, só
       // recebe uma cor literal — mesma restrição documentada em
       // src/lib/mdx.tsx sobre o tema do bloco de código. Hex fixos abaixo
-      // espelham src/app/globals.css: #f1f2f0 = --papel, #15171a = --tinta,
-      // #2b6a86 = --frio (modo claro). Se esses tokens mudarem, atualizar
-      // aqui também — não há como um ler o outro nesta pilha.
+      // espelham src/app/globals.css (modo claro): #fdfefd = --papel,
+      // #0e1210 = --tinta, #165a38 = --verde. Se esses tokens mudarem,
+      // atualizar aqui também — não há como um ler o outro nesta pilha.
       <div
         style={{
           width: '100%',
@@ -33,12 +33,12 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ loc
           flexDirection: 'column',
           justifyContent: 'center',
           padding: '80px',
-          backgroundColor: '#f1f2f0',
-          color: '#15171a',
+          backgroundColor: '#fdfefd',
+          color: '#0e1210',
         }}
       >
         <div style={{ fontSize: 84, lineHeight: 1.1 }}>{profile.name}</div>
-        <div style={{ marginTop: 24, fontSize: 40, color: '#2b6a86' }}>{t(profile.headline, activeLocale)}</div>
+        <div style={{ marginTop: 24, fontSize: 40, color: '#165a38' }}>{t(profile.headline, activeLocale)}</div>
       </div>
     ),
     size,

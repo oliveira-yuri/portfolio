@@ -12,7 +12,7 @@ export function EducationSection({ locale, education }: { locale: Locale; educat
         <div>
           <h3 className="font-display text-2xl text-tinta">{t(education.degree, locale)}</h3>
           <p className="mt-1 text-suave">{education.institution}</p>
-          <p className="mt-1 font-dado text-xs text-frio">{t(education.status, locale)}</p>
+          <p className="mt-1 font-dado text-xs text-verde">{t(education.status, locale)}</p>
         </div>
       </div>
     </Section>

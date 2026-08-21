@@ -97,7 +97,7 @@ export default async function PostPage({ params }: { params: Promise<{ locale: s
               <Link
                 href={`/${alternativo!.locale}/posts/${slug}`}
                 lang={htmlLang[alternativo!.locale]}
-                className="text-frio"
+                className="text-verde"
               >
                 {t(ui.post.lerNoIdiomaDisponivel, alternativo!.locale)}
               </Link>

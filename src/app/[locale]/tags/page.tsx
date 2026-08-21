@@ -40,7 +40,7 @@ export default async function TagsPage({ params }: { params: Promise<{ locale: s
         <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 font-dado text-sm">
           {tags.map(({ tag, total }) => (
             <li key={tag}>
-              <Link href={`/${locale}/tags/${tag}`} className="text-frio">
+              <Link href={`/${locale}/tags/${tag}`} className="text-verde">
                 #{tag}
               </Link>{' '}
               <span className="text-suave tabular-nums">{total}</span>

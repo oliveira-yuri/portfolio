@@ -29,7 +29,7 @@ export function PostFooter({
             <ul className="mt-2 space-y-2">
               {relacionados.map((outro) => (
                 <li key={outro.slug}>
-                  <Link href={`/${locale}/posts/${outro.slug}`} className="font-display text-tinta hover:text-frio">
+                  <Link href={`/${locale}/posts/${outro.slug}`} className="font-display text-tinta hover:text-verde">
                     {outro.titulo}
                   </Link>
                   <span className="block text-sm text-suave">{outro.resumo}</span>
@@ -46,7 +46,7 @@ export function PostFooter({
               {t(ui.post.estudarAFundo, locale)}
             </p>
             <p className="mt-2 text-sm text-suave">
-              <a href={cta.url} className="text-frio">
+              <a href={cta.url} className="text-verde">
                 {cta.formacao.nome}
               </a>{' '}
               — {t(cta.formacao.descricao, locale)}

@@ -29,7 +29,7 @@ export default function NotFound() {
           <p className="mt-8">
             <Link
               href="/pt"
-              className="border-b border-fio pb-0.5 transition-colors hover:border-frio hover:text-frio"
+              className="border-b border-fio pb-0.5 transition-colors hover:border-verde hover:text-verde"
             >
               Voltar para o início
             </Link>

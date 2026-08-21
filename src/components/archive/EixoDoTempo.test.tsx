@@ -111,14 +111,14 @@ describe('EixoDoTempo', () => {
     expect(doMeio?.style.height).not.toBe(maisCurto?.style.height)
   })
 
-  it('colore cada traço pelo polo do pilar', () => {
+  it('colore cada traço pela cor de marca do pilar, na escala sequencial', () => {
     const { container } = render(<EixoDoTempo locale="pt" posts={postFixture} />)
 
     expect(container.querySelector('[data-traco][data-pilar="projetos"]')).toHaveStyle({
-      backgroundColor: 'var(--quente)',
+      backgroundColor: 'var(--pilar-projetos)',
     })
     expect(container.querySelector('[data-traco][data-pilar="academico"]')).toHaveStyle({
-      backgroundColor: 'var(--frio)',
+      backgroundColor: 'var(--pilar-academico)',
     })
   })
 

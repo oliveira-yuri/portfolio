@@ -31,11 +31,12 @@ describe('PostHeader', () => {
     expect(screen.getByText(/atualizado em 19\/08\/2026/)).toBeInTheDocument()
   })
 
-  it('colore o rótulo do pilar pelo polo da escala, não por uma cor fixa', () => {
+  it('colore o rótulo do pilar com o verde de texto único da escala, vindo de classesDoPilar', () => {
     render(<PostHeader locale="pt" post={postFixture[0]} />)
 
-    // postFixture[0].pilar é 'projetos', que mapeia para o polo quente — se o
-    // rótulo estivesse fixo em text-frio (o polo frio), esta asserção falha.
-    expect(screen.getByRole('link', { name: 'Projetos' })).toHaveClass('text-quente')
+    // A escala sequencial não tem 3 passos acessíveis como texto (ver
+    // medição em src/lib/escala.ts) — os três pilares compartilham a mesma
+    // classe de texto verde; só a marca não textual (selo/barra) varia.
+    expect(screen.getByRole('link', { name: 'Projetos' })).toHaveClass('text-verde')
   })
 })

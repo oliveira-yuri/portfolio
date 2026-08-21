@@ -5,7 +5,7 @@
  */
 
 /** Link sublinhado que ganha cor de destaque no hover: CV/GitHub/LinkedIn/e-mail, projetos, certificados. */
-export const underlineLinkClass = 'border-b border-fio pb-0.5 transition-colors hover:border-frio hover:text-frio'
+export const underlineLinkClass = 'border-b border-fio pb-0.5 transition-colors hover:border-verde hover:text-verde'
 
 /** Botão pequeno com borda, usado nos controles do topo (troca de idioma, troca de tema). */
 export const topBarButtonClass =

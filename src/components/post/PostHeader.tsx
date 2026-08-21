@@ -34,7 +34,7 @@ export function PostHeader({ locale, post }: { locale: Locale; post: Post }) {
       </p>
       <h1 className="mt-2 max-w-[24em] font-display text-3xl text-tinta md:text-4xl">{post.titulo}</h1>
       <p className="mt-2 max-w-2xl text-suave">{post.resumo}</p>
-      <ul className="mt-3 flex flex-wrap gap-x-3 font-dado text-xs text-frio/90">
+      <ul className="mt-3 flex flex-wrap gap-x-3 font-dado text-xs text-verde/90">
         {post.tags.map((tag) => (
           <li key={tag}>
             <Link href={`/${locale}/tags/${tag}`}>#{tag}</Link>

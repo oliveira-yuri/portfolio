@@ -44,10 +44,10 @@ describe('Newsletter (home)', () => {
     expect(screen.queryByRole('heading', { level: 2, name: 'Experiência' })).not.toBeInTheDocument()
   })
 
-  it('mostra o eixo do tempo e a legenda da escala', async () => {
+  it('mostra a legenda da escala, sem o eixo do tempo (retirado de propósito, ver comentário em page.tsx)', async () => {
     render(await NewsletterPage({ params: Promise.resolve({ locale: 'pt' }) }))
 
-    expect(screen.getByRole('heading', { level: 2, name: 'Cadência' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Projetos 01' })).toHaveAttribute('href', '/pt/pilares/projetos')
+    expect(screen.queryByRole('heading', { level: 2, name: 'Cadência' })).not.toBeInTheDocument()
   })
 })

@@ -9,5 +9,5 @@ function mockFontLoader() {
   return { className: 'mock-font-className', variable: 'mock-font-variable' }
 }
 
-export const Newsreader = mockFontLoader
-export const IBM_Plex_Mono = mockFontLoader
+export const Familjen_Grotesk = mockFontLoader
+export const DM_Mono = mockFontLoader

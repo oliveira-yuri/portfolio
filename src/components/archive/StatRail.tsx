@@ -18,7 +18,7 @@ export function StatRail({ locale, posts }: { locale: Locale; posts: Post[] }) {
             mantém a leitura visual em uma linha só, como antes. */}
         <dt className="inline">{t(ui.newsletter.ultimo, locale)}</dt>{' '}
         {/* Data absoluta de propósito: o site é estático e "há N dias" congelaria no build. */}
-        <dd className="inline text-frio">{formatarData(maisRecente.data, locale)}</dd>
+        <dd className="inline text-verde">{formatarData(maisRecente.data, locale)}</dd>
       </div>
     </dl>
   )

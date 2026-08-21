@@ -20,7 +20,7 @@ export function ExperienceSection({ locale, items }: { locale: Locale; items: Ex
                     href={item.organizationUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="border-b border-fio transition-colors hover:border-frio hover:text-frio"
+                    className="border-b border-fio transition-colors hover:border-verde hover:text-verde"
                   >
                     {item.organization}
                   </a>
@@ -28,7 +28,7 @@ export function ExperienceSection({ locale, items }: { locale: Locale; items: Ex
                   item.organization
                 )}
               </p>
-              <ul className="mt-4 max-w-[65ch] list-disc space-y-2 pl-5 marker:text-frio">
+              <ul className="mt-4 max-w-[65ch] list-disc space-y-2 pl-5 marker:text-verde">
                 {item.highlights.map((highlight, index) => (
                   <li key={index}>{t(highlight, locale)}</li>
                 ))}

@@ -44,7 +44,7 @@ export default async function TagPage({ params }: { params: Promise<{ locale: st
     <div className="mx-auto w-full max-w-[68rem] px-6 md:px-10">
       <TopBar locale={locale} />
       <main id="main" className="pb-16">
-        <h1 className="font-dado text-2xl text-frio">#{tag}</h1>
+        <h1 className="font-dado text-2xl text-verde">#{tag}</h1>
         {/* ArchiveList emite <h3> por mês — precisa de uma seção com <h2> aqui
             embaixo do <h1>, senão pula um nível (WCAG 1.3.1). Mesmo padrão de
             src/app/[locale]/page.tsx. */}
