@@ -34,11 +34,11 @@ O componente que planta o arquivo como eixo do tempo está **construído, testad
 
 ## Verificação
 
-281 testes unitários e 11 de ponta a ponta. `typecheck`, `lint` e `build` limpos. O site builda com `src/content/posts/` vazio, verificado explicitamente — precisa buildar antes do primeiro texto existir.
+282 testes unitários e 11 de ponta a ponta. `typecheck`, `lint` e `build` limpos. O site builda com `src/content/posts/` vazio, verificado explicitamente — precisa buildar antes do primeiro texto existir.
 
 ## O que falta, e é humano
 
-Escrever três textos, um por pilar, antes de publicar. A home abre com o eixo do tempo: com um texto só ele é um traço solitário; com três distribuídos, a estrutura se sustenta. Depois disso, apontar o e2e para um texto real e apagar o post de verificação.
+Escrever três textos, um por pilar, antes de publicar. Com um texto só, a legenda da escala mostra `01`, `00`, `00` e o arquivo tem um mês; com três distribuídos entre os pilares, a estrutura se sustenta e a legenda passa a explicar alguma coisa. Depois disso, apontar o e2e para um texto real e apagar o post de verificação.
 
 ## Pendências fora do código
 
