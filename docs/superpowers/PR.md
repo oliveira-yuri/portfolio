@@ -12,16 +12,18 @@ Transforma o portfólio de página única numa newsletter, e substitui a camada 
 - **Bilíngue de verdade.** Um post pode existir em um idioma só: não dá 404, mostra aviso traduzido e link para a versão que existe. `hreflang` declara só os idiomas que realmente existem.
 - **Páginas de tag e de pilar**, RSS por idioma, sitemap, metadados e imagem de compartilhamento por post.
 
-## Direção visual: "Intervalo"
+## Direção visual: "Clorofila"
 
-A primeira versão usava papel creme, serifada de alto contraste e fios de jornal. Revisada com critério de design, isso é o resultado genérico que ferramentas de IA produzem por padrão, independente do assunto — e o pedido era justamente não parecer com todo mundo.
+Claro em branco, escuro em verde — a identidade que já era do autor, retomada depois de duas tentativas descartadas.
 
-A direção nova deriva de estatística, que é a área do autor:
+- **Verde é estrutura, não enfeite:** régua do topo, rótulos, marcas e links.
+- **Duas famílias, nenhuma com serifa.** Familjen Grotesk em display e texto; DM Mono em todo dado e metadado.
+- **Os três pilares numa escala sequencial** de verde, na ordem abstrato → aplicado. A medição mostrou que uma rampa de uma cor só não pode ser distinguível e legível como texto ao mesmo tempo, então a cor do pilar vive nas **marcas** (quadrado da legenda, barra de tempo de leitura) e o rótulo usa um verde único e acessível.
+- **Sem fio entre linhas do arquivo.** O ritmo vem do espaço.
 
-- **A paleta é uma escala divergente** — frio, neutro, quente — e os três pilares ocupam seus três pontos na ordem do abstrato ao aplicado: `academico` → `ensino` → `projetos`. A cor codifica um eixo real em vez de decorar.
-- **Duas famílias, nenhuma sem serifa.** Newsreader carrega display e texto corrido (eixo óptico real, daí `axes: ['opsz']`); IBM Plex Mono carrega todo dado e metadado. Não existe terceira categoria.
-- **A assinatura é o eixo do tempo:** o arquivo plotado, um traço por texto, posição pela data, altura pelo tempo de leitura, cor pelo pilar. A densidade que se vê *é* a cadência de publicação — o mesmo dado da lista abaixo, em outra projeção.
-- **Sem fio entre linhas do arquivo.** O ritmo vem do espaço. Régua existe sob o eixo e sob títulos de seção, e em nenhum outro lugar.
+Contrastes medidos, todos acima do mínimo da WCAG: `suave` sobre `papel` 6,44:1 e 6,60:1; verde do rótulo 8,13:1 e 8,35:1; marcas de pilar 4,24 a 12,75 no claro e 3,98 a 9,53 no escuro; comentário de código 6,06:1 e 5,76:1.
+
+O componente que planta o arquivo como eixo do tempo está **construído, testado e desligado** por decisão do autor: com poucos textos ele é um traço solitário. Volta com uma linha quando houver conteúdo — não apagar.
 
 ## Bugs pré-existentes que apareceram no caminho
 

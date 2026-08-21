@@ -39,7 +39,7 @@ ibe.IA. Secundário significa que ele **nunca** se sobrepõe à leitura; a seç�
 | Fluxo de publicação | Arquivo novo, commit, push | Sem CMS, sem banco, sem painel. Versionado, e o deploy é automático. |
 | Idiomas | PT e EN, com post podendo existir em um só | Alcance internacional sem obrigar tradução de tudo. |
 | Taxonomia | Pilar fechado (1 por post) + tags livres (1–4) | Pilar é tipado e governa navegação e visual; tag livre nunca governa layout. |
-| Home | Identidade curta + eixo do tempo + legenda da escala + destaques + arquivo | Recrutador se localiza em segundos; leitor recorrente rola para o conteúdo. Nenhuma seção "sobre mim" além do bloco de identidade. |
+| Home | Identidade curta + legenda da escala + destaques + arquivo | Recrutador se localiza em segundos; leitor recorrente rola para o conteúdo. Nenhuma seção "sobre mim" além do bloco de identidade. O eixo do tempo existe e está desligado; ver "Design visual". |
 | Página de post | Coluna única + índice de seções fixo | Texto técnico longo se navega melhor com índice. Material de apoio fica no fluxo do texto. |
 | Ligação com o ibe.IA | Bloco no fim do post, por pilar, opt-in por texto | Não interrompe a leitura, alcança o leitor mais qualificado, e nunca aparece sem o autor pedir. |
 | Data do post | Somente no nome do arquivo | Fonte única de verdade; os arquivos ordenam cronologicamente no editor. |
@@ -231,100 +231,107 @@ serve a Newsletter e o portfólio vive em `/pt/portfolio`. Nenhuma URL deixa de
 responder; o conteúdo de `/pt` muda. `sitemap.ts` passa a listar posts, tags e
 pilares dos dois idiomas.
 
-## Design visual — direção "Intervalo"
+## Design visual — direção "Clorofila"
 
-**Esta seção substitui a identidade anterior.** A primeira versão do site usava
-papel quente `#faf9f6`, uma serifada de alto contraste e fios de jornal — uma
-combinação que, revisada com critério de design, se revelou o resultado
-genérico que ferramentas de IA produzem por padrão, independente do assunto.
-Foi trocada por uma direção derivada do assunto real: estatística.
+**Esta seção substitui duas identidades anteriores.** A primeira (papel creme,
+serifada de alto contraste, fios de jornal) era o resultado genérico que
+ferramentas de IA produzem por padrão. A segunda ("Intervalo", escala divergente
+frio/quente com Newsreader) foi rejeitada pelo autor: ele quis de volta a
+identidade que já era dele — claro em branco, escuro em verde.
 
-A tese é **uma publicação que mostra a própria incerteza**.
+A tese é **verde como estrutura, não como enfeite**.
 
-### Cor: uma escala divergente, não uma cor de destaque
-
-A paleta é uma escala divergente — frio, neutro, quente — que é o vocabulário
-de quem lê gráfico de calibração. E ela **codifica algo verdadeiro**: os três
-pilares ocupam os três pontos da escala, na ordem do abstrato ao aplicado.
+### Cor
 
 | Token | Claro | Escuro | Papel |
 |---|---|---|---|
-| `papel` | `#f1f2f0` | `#14171a` | fundo, neutro frio — deliberadamente não creme |
-| `tinta` | `#15171a` | `#e8eae8` | texto |
-| `suave` | `#5c6269` | `#949b9f` | texto secundário; **também o polo neutro** |
-| `fio` | `#d4d7d5` | `#262b2e` | régua, borda |
-| `frio` | `#2b6a86` | `#6fb3ce` | polo frio; **pilar `academico`** |
-| `quente` | `#9c4a6e` | `#d98aa8` | polo quente; **pilar `projetos`** |
+| `papel` | `#fdfefd` | `#0b1310` | fundo |
+| `tinta` | `#0e1210` | `#e8f0ea` | texto |
+| `suave` | `#57605a` | `#8c9d92` | texto secundário |
+| `fio` | `#dde5df` | `#1e2a24` | régua, borda |
+| `verde` | — | — | destaque do site e rótulo de pilar |
 
-O pilar `ensino` ocupa o meio da escala e usa `suave`. O mapeamento
-pilar → polo vive num módulo único; nenhum componente escolhe cor de pilar por
-conta própria.
+O verde carrega a régua do topo, os rótulos, as marcas e os links. Medidos:
+`suave` sobre `papel` dá 6,44:1 no claro e 6,60:1 no escuro; `verde` sobre
+`papel` dá 8,13:1 e 8,35:1. Todos acima do mínimo de 4,5:1 da WCAG.
 
-### Tipografia: duas famílias, três papéis, nenhuma sem serifa
+### A escala dos pilares, e por que ela mudou de forma
 
-- **Newsreader** (variável, eixo óptico 6–72) carrega display E texto corrido.
-  A mesma família se comporta de forma diferente em 34px e em 17px porque o
-  eixo óptico é real, não uma simulação por peso.
-- **IBM Plex Mono** carrega todo dado, rótulo, metadado e número.
+Os três pilares continuam ordenados do abstrato ao aplicado — `academico` →
+`ensino` → `projetos` —, mas a escala deixou de ser divergente (não existe
+"frio" e "quente" numa cor só) e virou **sequencial**: três tons de verde.
 
-O site não usa nenhuma fonte sem serifa. É uma restrição deliberada: dado é
-monoespaçado, prosa é serifada, e não há terceira categoria.
+Isso trouxe um conflito real, resolvido por medição: **uma rampa sequencial de
+uma cor só não consegue ser ao mesmo tempo distinguível e legível como texto
+nas três pontas.** O passo mais claro sobre fundo branco fica em torno de
+1,9:1, contra os 4,5:1 exigidos. Nenhuma combinação testada resolveu — os
+passos mais próximos de passar ficaram em 1,54:1 de contraste entre si, ou
+seja, indistinguíveis.
 
-Os tokens de fonte são nomeados por papel — `--font-display`, `--font-texto`,
-`--font-dado` — e não por classificação tipográfica, porque `font-sans`
-apontando para uma serifada seria um nome que mente.
+A resolução:
 
-### Assinatura: o eixo do tempo
+- **O rótulo de pilar é texto, então usa `verde`** — uma cor só, legível, para
+  os três pilares.
+- **A cor do pilar vive nas marcas**: o quadrado da legenda e a barra de tempo
+  de leitura, que são elementos não-textuais e respondem ao limiar de 3:1.
+  Medidos: 4,24 / 7,28 / 12,75 no claro e 3,98 / 6,40 / 9,53 no escuro.
 
-O elemento pelo qual a home é lembrada é o **arquivo plotado como eixo do
-tempo**: um traço por texto, posicionado pela data, colorido pelo pilar. A
-densidade que o leitor enxerga *é* a cadência de publicação. Não é enfeite —
-é o mesmo dado da listagem abaixo, em outra projeção.
+O pilar continua codificado por cor; o que mudou é **onde** a cor mora.
+`src/lib/escala.ts` segue sendo o único lugar que decide cor de pilar.
 
-Cada linha do arquivo carrega uma **barra de intervalo** cujo comprimento é o
-tempo de leitura. Número tratado como grandeza, não como texto.
+### Tipografia: duas famílias, nenhuma com serifa
+
+- **Familjen Grotesk** carrega display e texto corrido.
+- **DM Mono** carrega todo número, rótulo, data e metadado.
+
+Não há serifada no projeto. Os tokens são nomeados por papel —
+`--font-display`, `--font-texto`, `--font-dado` — e não por classificação
+tipográfica.
+
+### O eixo do tempo está construído e desligado
+
+O componente `EixoDoTempo` planta o arquivo inteiro: um traço por texto,
+posição pela data, altura pelo tempo de leitura, cor pelo pilar. Ele existe,
+está testado — inclusive com testes que verificam por mutação que a posição é
+proporcional ao tempo decorrido e não ao índice do array — e **não é renderizado
+por decisão do autor**.
+
+O motivo: o gráfico só significa alguma coisa com dezenas de textos. Com três,
+é um traço solitário anunciando que o site é novo. Volta quando o arquivo o
+justificar, e voltar custa uma linha em `src/app/[locale]/page.tsx`.
+
+**Não apagar o componente.** A ausência de consumidor é deliberada e está
+documentada no próprio arquivo.
 
 ### Ritmo estrutural
 
-O arquivo **não** usa fio entre linhas. Separar cada item com uma régua de um
-pixel produz a densidade de jornal que é, ela mesma, um clichê de design
-gerado. O ritmo vem do espaço, do rótulo de pilar acima do título e da barra
-de intervalo à direita. Fio existe só sob o eixo do tempo e sob títulos de
-seção.
+O arquivo **não** usa fio entre linhas — separar cada item com uma régua de um
+pixel produz densidade de jornal, que é um clichê de design gerado. O ritmo vem
+do espaço, do rótulo de pilar acima do título e da barra de intervalo à direita.
+Fio existe sob títulos de seção, e no rodapé do artigo, onde marca um fim real.
 
 ### Ordem da home
 
 1. **Identidade** — nome em display, três a quatro linhas, links para
    currículo, GitHub, LinkedIn e Portfólio.
-2. **Eixo do tempo**, sob o título "Cadência", com legenda em monoespaçada:
-   total de textos à esquerda, período à direita. O rótulo é "Cadência" e não
-   "Arquivo" porque é o que o gráfico mostra de fato — densidade de publicação
-   ao longo do tempo. "Arquivo" fica com a lista cronológica, que é o que esse
-   nome descreve. Dois `h2` com o mesmo texto na mesma página seriam um sumário
-   ambíguo para quem navega por cabeçalhos.
-3. **Legenda da escala** — os três pilares como pontos da escala divergente,
-   cada um linkando para sua página. Substitui os cartões de trilha da versão
-   anterior: com o eixo do tempo acima, três cartões repetiam a mesma
-   informação ocupando o dobro do espaço.
+2. **Legenda da escala** — os três pilares com contagem real (inclusive `00`),
+   cada um linkando para sua página.
+3. **Barra de números** — data absoluta do texto mais recente, nunca tempo
+   relativo: o site é estático e um tempo relativo congelaria no build.
 4. **Destaques**, com resumo.
 5. **Arquivo cronológico** agrupado por mês.
-
-Regras contra o problema de site recém-nascido continuam valendo: a legenda
-mostra contagens reais desde o primeiro dia, e a barra de números exibe data
-absoluta, nunca tempo relativo — o site é estático e um tempo relativo
-congelaria no build.
 
 ### Página de post
 
 Duas colunas no desktop, índice de seções à esquerda, texto à direita, com o
 título antes do índice na ordem do DOM. O corpo mantém medida controlada,
 fórmula em KaTeX, tabela com cabeçalho monoespaçado e números alinhados por
-dígito, figura com legenda numerada, código com realce feito no build.
+dígito, figura com legenda numerada, código com realce feito no build e
+comentário na cor `suave` (6,06:1 no claro, 5,76:1 no escuro).
 
 ### Movimento
 
-Praticamente nenhum. O `Reveal` já existente continua; nada novo é
-acrescentado. A assinatura é o eixo, e uma assinatura basta.
+Praticamente nenhum. O `Reveal` já existente continua; nada novo é acrescentado.
 
 
 ## Ligação com o ibe.IA
